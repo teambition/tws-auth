@@ -10,7 +10,7 @@ tman.suite('cache - redis', function () {
 
   let store
   tman.beforeEach(function * () {
-    store = new RedisStore(['127.0.0.1:6379'], prefix)
+    store = new RedisStore({ addrs: ['127.0.0.1:6379'] }, prefix)
     yield store.client.del(`${prefix}$${key}`)
   })
 
@@ -27,7 +27,7 @@ tman.suite('cache - redis', function () {
 
   tman.it('should set the specifed value', function * () {
     ;((yield store.get(key)) === null).should.be.true()
-    yield store.set(key, 'test_value')
+    yield store.set(key, 'test_value', 2000)
     ;(yield store.get(key)).should.equal('test_value')
   })
 })

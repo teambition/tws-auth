@@ -3,9 +3,13 @@ const redis = require('thunk-redis')
 const Store = require('./store')
 
 class RedisStore extends Store {
-  constructor (addrs = ['127.0.0.1:6379'], prefix = 'TWS_AUTH') {
+  constructor (options, prefix = 'TWS_AUTH') {
+    if (!options || !options.addrs) throw new Error('options.addrs is required')
+
     super()
-    this.client = redis.createClient(addrs)
+
+    this.client = redis.createClient(Object.assign(options),
+      { usePromise: true })
     this.prefix = prefix
 
     for (const event of ['error', 'close']) {
@@ -13,12 +17,12 @@ class RedisStore extends Store {
     }
   }
 
-  * get (key) {
-    return yield this.client.get(this.generateRedisKey(key))
+  get (key) {
+    return this.client.get(this.generateRedisKey(key))
   }
 
-  * set (key, value) {
-    return yield this.client.set(this.generateRedisKey(key), value)
+  set (key, value, ttl) {
+    return this.client.psetex(this.generateRedisKey(key), ttl, value)
   }
 
   generateRedisKey (key) {

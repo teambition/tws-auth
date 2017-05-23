@@ -6,7 +6,7 @@ class Store extends EventEmitter {
     throw new Error('store.get() should be implemented manually')
   }
 
-  set (key, value) {
+  set (key, value, ttl) {
     throw new Error('store.set() should be implemented manually')
   }
 }

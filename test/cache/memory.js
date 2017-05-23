@@ -16,14 +16,17 @@ tman.suite('cache - memory', function () {
   })
 
   tman.it('should get the specfied value', function * () {
-    ;((yield store.get('test_key')) === undefined).should.be.true()
-    store.map.set('test_key', 'test_value')
+    ;((yield store.get('test_key')) === null).should.be.true()
+    store.map.set('test_key', {
+      value: 'test_value',
+      expiredAt: Date.now() + 200
+    })
     ;(yield store.get('test_key')).should.equal('test_value')
   })
 
   tman.it('should set the specifed value', function * () {
-    ;((yield store.get('test_key')) === undefined).should.be.true()
-    yield store.set('test_key', 'test_value')
+    ;((yield store.get('test_key')) === null).should.be.true()
+    yield store.set('test_key', 'test_value', 2000)
     ;(yield store.get('test_key')).should.equal('test_value')
   })
 })
