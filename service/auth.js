@@ -15,6 +15,8 @@ class Auth {
 
     return urllib.request(`${this.options.host}/v1/apps/authorize`, {
       method: 'POST',
+      contentType: 'json',
+      dataType: 'json',
       data: {
         _appId: this.options.appId,
         resourceId: this.options.appId,
