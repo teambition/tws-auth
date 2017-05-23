@@ -1,0 +1,29 @@
+{
+  "name": "tws-auth",
+  "version": "0.0.1",
+  "description": "Node.js SDK of TWS (Teambition Web Service) authorization service",
+  "main": "index.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/standard",
+    "test": "npm run lint && ./node_modules/.bin/tman -r should 'test/**/*.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teambition/tws-auth.git"
+  },
+  "author": "DavidCai1993",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/teambition/tws-auth/issues"
+  },
+  "homepage": "https://github.com/teambition/tws-auth#readme",
+  "dependencies": {
+    "thunk-redis": "^2.1.0",
+    "urllib": "^2.22.0"
+  },
+  "devDependencies": {
+    "should": "^11.2.1",
+    "standard": "^10.0.2",
+    "tman": "^1.6.7"
+  }
+}
