@@ -8,8 +8,12 @@ class MemoryStore extends Store {
   }
 
   get (key) {
-    let result = this.map.get(key)
-    if (!result || result.expiredAt < Date.now()) return Promise.resolve(null)
+    const result = this.map.get(key)
+
+    if (!result || result.expiredAt < Date.now()) {
+      this.map.delete(key)
+      return Promise.resolve(null)
+    }
 
     return Promise.resolve(result.value)
   }
