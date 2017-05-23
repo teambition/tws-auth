@@ -15,7 +15,7 @@ class Client {
     options.resourceType = options.resourceType || 'app'
     options.host = options.host || 'https://auth.teambitionapis.com'
 
-    // Services provided by Auth
+    // Services provided by TWS authorization service
     this.auth = new services.Auth(options)
     this.user = new services.User(options)
   }
