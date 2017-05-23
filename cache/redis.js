@@ -14,11 +14,15 @@ class RedisStore extends Store {
   }
 
   * get (key) {
-    return yield this.client.get(`${this.prefix}$${key}`)
+    return yield this.client.get(this.generateRedisKey(key))
   }
 
   * set (key, value) {
-    return yield this.client.set(`${this.prefix}$${key}`, value)
+    return yield this.client.set(this.generateRedisKey(key), value)
+  }
+
+  generateRedisKey (key) {
+    return `${this.prefix}$${key}`
   }
 }
 
