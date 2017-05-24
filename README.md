@@ -14,15 +14,14 @@ npm install tws-auth
 ```js
 const Client = require('tws-auth')
 
-const client = new Client({
-  host: 'https://auth.teambitionapis.com',
-  appId: '78f95e92c06a546f7dab7327',
-  appSecret: 'app_secret',
-  resourceType: 'app'
-})
+;(async function () {
+  const client = new Client({
+    host: 'https://auth.teambitionapis.com',
+    appId: '78f95e92c06a546f7dab7327',
+    appSecret: 'app_secret',
+    resourceType: 'app'
+  })
 
-(async funciton () {
-  let { access_token } = await client.auth.authorize()
-  console.log(access_token)
+  console.log(await client.auth.authorize())
 })(console.error)
 ```

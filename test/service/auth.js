@@ -13,7 +13,7 @@ tman.suite('service - auth', function () {
   })
 
   tman.it('authorize', function * () {
-    let { access_token } = yield auth.authorize()
-    access_token.length.should.not.equal(0)
+    let token = yield auth.authorize()
+    token.length.should.not.equal(0)
   })
 })

@@ -7,9 +7,7 @@ class RedisStore extends Store {
     if (!options || !options.addrs) throw new Error('options.addrs is required')
 
     super()
-
-    this.client = redis.createClient(Object.assign(options),
-      { usePromise: true })
+    this.client = redis.createClient(Object.assign(options, { usePromise: true }))
     this.prefix = prefix
 
     for (const event of ['error', 'close']) {
@@ -22,7 +20,8 @@ class RedisStore extends Store {
   }
 
   set (key, value, ttl) {
-    return this.client.psetex(this.generateRedisKey(key), ttl, value)
+    return this.client
+      .psetex(this.generateRedisKey(key), ttl, value)
   }
 
   generateRedisKey (key) {
