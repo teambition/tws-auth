@@ -1,5 +1,6 @@
 'use strict'
 const EventEmitter = require('events')
+const assert = require('power-assert')
 const tman = require('tman')
 const Store = require('../../cache/store')
 const MemoryStore = require('../../cache/memory')
@@ -11,22 +12,19 @@ tman.suite('cache - memory', function () {
   })
 
   tman.it('should extend EventEmitter and Store', function () {
-    ;(store instanceof EventEmitter).should.be.true()
-    ;(store instanceof Store).should.be.true()
+    assert(store instanceof EventEmitter)
+    assert(store instanceof Store)
   })
 
   tman.it('should get the specfied value', function * () {
-    ;((yield store.get('test_key')) === null).should.be.true()
-    store.map.set('test_key', {
-      value: 'test_value',
-      expiredAt: Date.now() + 200
-    })
-    ;(yield store.get('test_key')).should.equal('test_value')
+    assert((yield store.get('test_key')) === null)
+    store.map.set('test_key', { value: 'test_value', expiredAt: Date.now() + 200 })
+    assert((yield store.get('test_key')) === 'test_value')
   })
 
   tman.it('should set the specifed value', function * () {
-    ;((yield store.get('test_key')) === null).should.be.true()
+    assert((yield store.get('test_key')) === null)
     yield store.set('test_key', 'test_value', 2000)
-    ;(yield store.get('test_key')).should.equal('test_value')
+    assert((yield store.get('test_key')) === 'test_value')
   })
 })

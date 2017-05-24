@@ -1,5 +1,6 @@
 'use strict'
 const tman = require('tman')
+const assert = require('power-assert')
 const MemoryStore = require('../../cache/memory')
 const Auth = require('../../service/auth')
 
@@ -14,6 +15,6 @@ tman.suite('service - auth', function () {
 
   tman.it('authorize', function * () {
     let token = yield auth.authorize()
-    token.length.should.not.equal(0)
+    assert(token.length !== 0)
   })
 })
