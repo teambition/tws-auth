@@ -7,8 +7,8 @@ const Auth = require('../../service/auth')
 tman.suite('service - auth', function () {
   let auth = new Auth({
     cacheStore: new MemoryStore(),
-    host: 'http://192.168.0.21:31090',
-    appId: '58f95e92c06a546f7dab73c7',
+    host: 'http://121.196.214.67:31090',
+    appId: '5926a8e876d70b7334461818',
     appSecret: 'hello123',
     resourceType: 'self'
   })
