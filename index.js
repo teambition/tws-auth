@@ -14,6 +14,7 @@ class Client {
 
     options.resourceType = options.resourceType || 'app'
     options.host = options.host || 'https://auth.teambitionapis.com'
+    options.timeout = options.timeout || 2000
 
     // Services provided by TWS authorization service
     this.auth = new services.Auth(options)

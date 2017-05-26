@@ -26,6 +26,7 @@ class Auth {
           method: 'POST',
           contentType: 'json',
           dataType: 'json',
+          timeout: this.options.timeout,
           data: {
             _appId: this.options.appId,
             resourceId: this.options.appId,
