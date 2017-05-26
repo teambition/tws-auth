@@ -1,22 +1,15 @@
 'use strict'
-const statuses = require('statuses')
-const TWSError = require('../error/tws_error')
+const createError = require('http-errors')
 
 function assertRes ({ res }) {
   if (String(res.status).startsWith('2')) return res.data
 
-  if (!res.data) {
-    throw new TWSError(res.status, statuses[res.status])
-  }
+  if (!res.data) throw createError(res.status)
 
   const { error, message, data } = res.data
-  if (error) {
-    throw new TWSError(res.status, error)
-      .withMessage(message || '')
-      .withData(data || null)
-  }
+  if (error) throw createError(res.status, error, { message, data })
 
-  throw new TWSError(res.status, String(res.data))
+  throw createError(res.status, String(res.data))
 }
 
 module.exports = { assertRes }
