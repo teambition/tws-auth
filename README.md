@@ -19,7 +19,6 @@ const Client = require('tws-auth')
     host: 'https://auth.teambitionapis.com',
     appId: '78f95e92c06a546f7dab7327',
     appSecret: 'app_secret',
-    resourceType: 'app'
   })
 
   console.log(await client.auth.authorize())
