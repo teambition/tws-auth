@@ -12,7 +12,6 @@ class Client {
       throw new TypeError('cacheStore should be an instance of Store')
     }
 
-    options.resourceType = options.resourceType || 'app'
     options.host = options.host || 'https://auth.teambitionapis.com'
     options.timeout = options.timeout || 2000
 

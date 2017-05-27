@@ -11,15 +11,14 @@ class Auth {
     this.options = options
   }
 
-  authorize () {
+  authorize (_resourceId, resourceType) {
     return co(function * () {
       if (this.options.cacheStore) {
-        const token = yield this.options.cacheStore.get(this.options.appId)
+        const token = yield this.options.cacheStore.get(_resourceId)
         if (token) return token
       }
 
-      const token = jwt.sign({ _appId: this.options.appId },
-                             this.options.appSecret)
+      const token = jwt.sign({ _appId: this.options.appId }, this.options.appSecret)
 
       const data = assertRes(yield urllib
         .request(`${this.options.host}/v1/apps/authorize`, {
@@ -28,9 +27,9 @@ class Auth {
           dataType: 'json',
           timeout: this.options.timeout,
           data: {
+            _resourceId,
+            resourceType,
             _appId: this.options.appId,
-            resourceId: this.options.appId,
-            resourceType: this.options.resourceType,
             name: 'tws-auth',
             grantType: 'client_credentials'
           },
@@ -38,7 +37,7 @@ class Auth {
         }))
 
       if (this.options.cacheStore) {
-        yield this.options.cacheStore.set(this.options.appId, data.access_token,
+        yield this.options.cacheStore.set(_resourceId, data.access_token,
           data.expiresIn > FIVE_MINUTES
                            ? data.expiresIn - FIVE_MINUTES
                            : data.expiresIn
