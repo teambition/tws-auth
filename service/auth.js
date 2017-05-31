@@ -25,6 +25,8 @@ class Auth {
           method: 'POST',
           contentType: 'json',
           dataType: 'json',
+          cert: this.options.cert,
+          key: this.options.privateKey,
           timeout: this.options.timeout,
           data: {
             _resourceId,

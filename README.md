@@ -29,14 +29,16 @@ const Client = require('tws-auth')
 
 ### Class Client
 
-#### new Client({ appId, appSecret, [host, timeout, cacheStore] })
+#### new Client({ appId, appSecret, [host, timeout, cacheStore, certPath, privateKey] })
 
 - appId `String` : The ID of your TWS application.
 - appSecret: `String` : The secret password of your TWS application.
-- host `String` : Host URL of TWS authorization service, by default is `'https://auth.teambitionapis.com'`.
-- timeout `Number` : Requst timeout in milliseconds, by default is `2000`.
-- cacheStore `Object` : Optional, the cache store for TWS access token, if provided, it should be an instance of require('tws-auth/cache/store') .
+- host `String` : Optional, host URL of TWS authorization service, by default is `'https://auth.teambitionapis.com'`.
+- timeout `Number` : Optional, requst timeout in milliseconds, by default is `2000`.
+- cacheStore `Object` : Optional, the cache store for TWS access token, if provided, it should be an instance of `require('tws-auth/cache/store')` .
+- certPath `String` : Optional, path to the client certificate file.
+- privateKey `String` : Optional, the client certificate private key.
 
-#### Authorization methods
+### Authorization methods
 
-##### Class Method: client.auth.authorize(_resourceId, resourceType)
+#### Class Method: client.auth.authorize(_resourceId, resourceType)
