@@ -19,7 +19,10 @@ class Auth extends Service {
         if (token) return token
       }
 
-      const token = jwt.sign({ _appId: this.options.appId }, this.options.appSecret)
+      const token = jwt.sign(
+        { _appId: this.options.appId },
+        this.options.appSecret
+      )
 
       const data = assertRes(yield this._requestWithToken(
         'POST',

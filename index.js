@@ -1,5 +1,4 @@
 'use strict'
-const fs = require('fs')
 const validator = require('validator')
 const Store = require('./cache/store')
 const services = require('./service')
@@ -15,7 +14,6 @@ class Client {
 
     options.host = options.host || 'https://auth.teambitionapis.com'
     options.timeout = options.timeout || 2000
-    if (options.certPath) options.cert = fs.readFileSync(options.certPath)
 
     // Services provided by TWS authorization service
     this.auth = new services.Auth(options)
