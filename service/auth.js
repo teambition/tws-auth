@@ -1,13 +1,14 @@
 'use strict'
 const co = require('co')
-const urllib = require('urllib')
 const jwt = require('jsonwebtoken')
+const Service = require('./common')
 const { assertRes } = require('../util/request')
 
 const FIVE_MINUTES = 5 * 60
 
-class Auth {
+class Auth extends Service {
   constructor (options) {
+    super(options)
     this.options = options
   }
 
@@ -20,23 +21,18 @@ class Auth {
 
       const token = jwt.sign({ _appId: this.options.appId }, this.options.appSecret)
 
-      const data = assertRes(yield urllib
-        .request(`${this.options.host}/v1/apps/authorize`, {
-          method: 'POST',
-          contentType: 'json',
-          dataType: 'json',
-          cert: this.options.cert,
-          key: this.options.privateKey,
-          timeout: this.options.timeout,
-          data: {
-            _resourceId,
-            resourceType,
-            _appId: this.options.appId,
-            name: 'tws-auth',
-            grantType: 'client_credentials'
-          },
-          headers: { Authorization: `Bearer ${token}` }
-        }))
+      const data = assertRes(yield this._requestWithToken(
+        'POST',
+        `${this.options.host}/v1/apps/authorize`,
+        {
+          _resourceId,
+          resourceType,
+          _appId: this.options.appId,
+          name: 'tws-auth',
+          grantType: 'client_credentials'
+        },
+        token
+      ))
 
       if (this.options.cacheStore) {
         yield this.options.cacheStore.set(_resourceId, data.access_token,

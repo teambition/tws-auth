@@ -12,4 +12,15 @@ function assertRes ({ res }) {
   throw createError(res.status, String(res.data))
 }
 
-module.exports = { assertRes }
+function assertResultWithError ({ res }) {
+  if (String(res.status).startsWith('2')) return res.data
+
+  if (!res.data) throw createError(res.status)
+
+  const { result, error } = res.data
+  if (!error) return result
+
+  throw createError(error.code, error.error, { message: error.message })
+}
+
+module.exports = { assertRes, assertResultWithError }
