@@ -20,7 +20,7 @@ function assertResultWithError ({ res }) {
   const { result, error } = res.data
   if (!error) return result
 
-  throw createError(error.code, error.error, { message: error.message })
+  throw createError(res.status, error.error, { message: error.message })
 }
 
 module.exports = { assertRes, assertResultWithError }
