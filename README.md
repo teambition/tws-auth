@@ -55,3 +55,27 @@ const Client = require('tws-auth')
 #### Class Method: client.user.getById(_userId, token)
 
 #### Class Method: client.user.getByEmail(email, token)
+
+### Suite methods
+
+#### Class Method: client.suite.getById(_suiteId, token)
+
+#### Class Method: client.suite.updateById(_suiteId, body, token)
+
+#### Class Method: client.suite.updateAESKeysById(_suiteId, AESKeys, token)
+
+#### Class Method: client.suite.updateCallbackUrlById(_suiteId, callbackUrl, token)
+
+#### Class Method: client.suite.updateIpsById(_suiteId, ips, token)
+
+#### Class Method: client.suite.updateIsAccreditedById(_suiteId, isAccredited, token)
+
+#### Class Method: client.suite.updateIsDisabledById(_suiteId, isDisabled, token)
+
+#### Class Method: client.suite.updateSecretsById(_suiteId, secrets, token)
+
+#### Class Method: client.suite.transfer(_suiteId, _userId, token)
+
+#### Class Method: client.suite.listSuitesByUserId(_userId, token)
+
+#### Class Method: client.suite.createSuites(_creatorId, body, token)

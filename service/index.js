@@ -2,5 +2,6 @@
 
 module.exports = {
   Auth: require('./auth'),
-  User: require('./user')
+  User: require('./user'),
+  Suite: require('./suite')
 }
