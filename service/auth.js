@@ -2,7 +2,6 @@
 const co = require('co')
 const jwt = require('jsonwebtoken')
 const Service = require('./common')
-const { assertRes } = require('../util/request')
 
 const FIVE_MINUTES = 5 * 60
 
@@ -24,7 +23,7 @@ class Auth extends Service {
         this.options.appSecret
       )
 
-      const data = assertRes(yield this._requestWithToken(
+      const data = yield this._requestWithToken(
         'POST',
         `${this.options.host}/v1/apps/authorize`,
         {
@@ -35,7 +34,7 @@ class Auth extends Service {
           grantType: 'client_credentials'
         },
         token
-      ))
+      )
 
       if (this.options.cacheStore) {
         yield this.options.cacheStore.set(_resourceId, data.access_token,
@@ -47,6 +46,11 @@ class Auth extends Service {
 
       return data.access_token
     }.bind(this))
+  }
+
+  activateApp (_appId, body, token) {
+    const url = `${this.options.host}/v1/apps/${_appId}/auths`
+    return this._requestWithToken('POST', url, body, token)
   }
 }
 

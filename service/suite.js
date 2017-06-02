@@ -1,7 +1,5 @@
 'use strict'
-const co = require('co')
 const Service = require('./common')
-const { assertRes } = require('../util/request')
 
 class Suite extends Service {
   constructor (options) {
@@ -10,129 +8,64 @@ class Suite extends Service {
   }
 
   getById (_suiteId, token) {
-    return co(function * () {
-      return assertRes(yield this._requestWithToken(
-        'GET',
-        `${this.options.host}/v1/suites/${_suiteId}`,
-        null,
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/suites/${_suiteId}`
+    return this._requestWithToken('GET', url, null, token)
   }
 
   updateById (_suiteId, body, token) {
-    return co(function * () {
-      return assertRes(yield this._requestWithToken(
-        'PUT',
-        `${this.options.host}/v1/suites/${_suiteId}`,
-        body,
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/suites/${_suiteId}`
+    return this._requestWithToken('PUT', url, body, token)
   }
 
   updateAESKeysById (_suiteId, AESKeys, token) {
     if (!Array.isArray(AESKeys)) AESKeys = [AESKeys]
-    return co(function * () {
-      return assertRes(yield this._requestWithToken(
-        'PUT',
-        `${this.options.host}/v1/suites/${_suiteId}/AESKeys`,
-        { AESKeys },
-        token
-      ))
-    }.bind(this))
+
+    const url = `${this.options.host}/v1/suites/${_suiteId}/AESKeys`
+    return this._requestWithToken('PUT', url, { AESKeys }, token)
   }
 
   updateCallbackUrlById (_suiteId, callbackUrl, token) {
-    return co(function * () {
-      return assertRes(yield this._requestWithToken(
-        'PUT',
-        `${this.options.host}/v1/suites/${_suiteId}/callbackURL`,
-        { callbackURL: callbackUrl },
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/suites/${_suiteId}/callbackURL`
+    return this._requestWithToken('PUT', url, { callbackURL: callbackUrl }, token)
   }
 
   updateIpsById (_suiteId, ips, token) {
     if (!Array.isArray(ips)) ips = [ips]
 
-    return co(function * () {
-      return assertRes(yield this._requestWithToken(
-        'PUT',
-        `${this.options.host}/v1/suites/${_suiteId}/ips`,
-        { ips },
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/suites/${_suiteId}/ips`
+    return this._requestWithToken('PUT', url, { ips }, token)
   }
 
   updateIsAccreditedById (_suiteId, isAccredited, token) {
-    return co(function * () {
-      return assertRes(yield this._requestWithToken(
-        'PUT',
-        `${this.options.host}/v1/suites/${_suiteId}/isAccredited`,
-        { isAccredited },
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/suites/${_suiteId}/isAccredited`
+    return this._requestWithToken('PUT', url, { isAccredited }, token)
   }
 
   updateIsDisabledById (_suiteId, isDisabled, token) {
-    return co(function * () {
-      return assertRes(yield this._requestWithToken(
-        'PUT',
-        `${this.options.host}/v1/suites/${_suiteId}/isDisabled`,
-        { isDisabled },
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/suites/${_suiteId}/isDisabled`
+    return this._requestWithToken('PUT', url, { isDisabled }, token)
   }
 
   updateSecretsById (_suiteId, secrets, token) {
     if (!Array.isArray(secrets)) secrets = [secrets]
 
-    return co(function * () {
-      return assertRes(yield this._requestWithToken(
-        'PUT',
-        `${this.options.host}/v1/suites/${_suiteId}/secrets`,
-        { secrets },
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/suites/${_suiteId}/secrets`
+    return this._requestWithToken('PUT', url, { secrets }, token)
   }
 
   transfer (_suiteId, _userId, token) {
-    return co(function * () {
-      return assertRes(yield this._requestWithToken(
-        'PUT',
-        `${this.options.host}/v1/suites/${_suiteId}/transfer`,
-        { _userId },
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/suites/${_suiteId}/transfer`
+    return this._requestWithToken('PUT', url, { _userId }, token)
   }
 
   listSuitesByUserId (_userId, token) {
-    return co(function * () {
-      return assertRes(yield this._requestWithToken(
-        'GET',
-        `${this.options.host}/v1/users/${_userId}/suites`,
-        null,
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/users/${_userId}/suites`
+    return this._requestWithToken('GET', url, null, token)
   }
 
   createSuites (_creatorId, body, token) {
-    return co(function * () {
-      return assertRes(yield this._requestWithToken(
-        'POST',
-        `${this.options.host}/v1/users/${_creatorId}/suites`,
-        body,
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/users/${_creatorId}/suites`
+    return this._requestWithToken('POST', url, body, token)
   }
 }
 

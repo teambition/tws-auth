@@ -1,5 +1,4 @@
 'use strict'
-const co = require('co')
 const Service = require('./common')
 const { assertResultWithError } = require('../util/request')
 
@@ -10,64 +9,36 @@ class User extends Service {
   }
 
   login (name, password, requestType, responseType, token) {
-    return co(function * () {
-      return assertResultWithError(yield this._requestWithToken(
-        'POST',
-        `${this.options.host}/v1/user/login`,
-        {
-          name,
-          password,
-          grant_type: 'password',
-          request_type: requestType,
-          response_type: responseType
-        },
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/user/login`
+    return this._requestWithToken('POST', url,
+      {
+        name,
+        password,
+        grant_type: 'password',
+        request_type: requestType,
+        response_type: responseType
+      }, token, assertResultWithError)
   }
 
   verifyCookie (cookie, signature, token) {
-    return co(function * () {
-      return assertResultWithError(yield this._requestWithToken(
-        'POST',
-        `${this.options.host}/v1/user/verify/cookie`,
-        { cookie, signed: signature },
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/user/verify/cookie`
+    return this._requestWithToken('POST', url, { cookie, signed: signature },
+    token, assertResultWithError)
   }
 
   verifyToken (tokenToVerify, token) {
-    return co(function * () {
-      return assertResultWithError(yield this._requestWithToken(
-        'POST',
-        `${this.options.host}/v1/user/verify/token`,
-        { token: tokenToVerify },
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/user/verify/token`
+    return this._requestWithToken('POST', url, { token: tokenToVerify }, token, assertResultWithError)
   }
 
   getById (_userId, token) {
-    return co(function * () {
-      return assertResultWithError(yield this._requestWithToken(
-        'GET',
-        `${this.options.host}/v1/users/${_userId}`,
-        null,
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/users/${_userId}`
+    return this._requestWithToken('GET', url, null, token, assertResultWithError)
   }
 
   getByEmail (email, token) {
-    return co(function * () {
-      return assertResultWithError(yield this._requestWithToken(
-        'GET',
-        `${this.options.host}/v1/users:getByEmail`,
-        { email },
-        token
-      ))
-    }.bind(this))
+    const url = `${this.options.host}/v1/users:getByEmail`
+    return this._requestWithToken('GET', url, { email }, token, assertResultWithError)
   }
 }
 

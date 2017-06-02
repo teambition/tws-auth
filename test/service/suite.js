@@ -26,7 +26,6 @@ tman.suite('service - suite', function () {
 
   tman.it('listSuitesByUserId', function * () {
     let suites = yield client.listSuitesByUserId('59294da476d70b4b83fa91a0', token)
-    console.log(suites)
     assert(Array.isArray(suites))
     assert(suites.length > 0)
   })
