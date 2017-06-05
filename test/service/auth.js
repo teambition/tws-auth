@@ -9,12 +9,17 @@ tman.suite('service - auth', function () {
     cacheStore: new MemoryStore(),
     host: 'http://121.196.214.67:31090',
     appId: '59294da476d70b4b83fa91a5',
-    appSecret: 'hello123',
+    appSecret: process.env.APP_SECRET,
     timeout: 30000
   })
 
-  tman.it('authorize', function * () {
+  tman.it('authorize by type: self', function * () {
     let token = yield auth.authorize('59294da476d70b4b83fa91a5', 'self')
+    assert(token.length !== 0)
+  })
+
+  tman.it('authorize by type: user', function * () {
+    let token = yield auth.authorize('59294da476d70b4b83fa91a0', 'user')
     assert(token.length !== 0)
   })
 })
