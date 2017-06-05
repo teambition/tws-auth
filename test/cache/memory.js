@@ -2,8 +2,8 @@
 const EventEmitter = require('events')
 const assert = require('power-assert')
 const tman = require('tman')
-const Store = require('../../cache/store')
-const MemoryStore = require('../../cache/memory')
+const Store = require('../../lib/cache/store')
+const MemoryStore = require('../../lib/cache/memory')
 
 tman.suite('cache - memory', function () {
   let store

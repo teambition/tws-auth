@@ -2,8 +2,8 @@
 const EventEmitter = require('events')
 const assert = require('power-assert')
 const tman = require('tman')
-const Store = require('../../cache/store')
-const RedisStore = require('../../cache/redis')
+const Store = require('../../lib/cache/store')
+const RedisStore = require('../../lib/cache/redis')
 
 tman.suite('cache - redis', function () {
   let key = 'test_key'

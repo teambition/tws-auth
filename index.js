@@ -1,7 +1,7 @@
 'use strict'
 const validator = require('validator')
-const Store = require('./cache/store')
-const services = require('./service')
+const Store = require('./lib/cache/store')
+const services = require('./lib/service')
 
 class Client {
   constructor (options) {

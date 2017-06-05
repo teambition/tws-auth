@@ -1,9 +1,9 @@
 'use strict'
 const tman = require('tman')
 const assert = require('power-assert')
-const MemoryStore = require('../../cache/memory')
-const Auth = require('../../service/auth')
-const Client = require('../../service/suite')
+const MemoryStore = require('../../lib/cache/memory')
+const Auth = require('../../lib/service/auth')
+const Client = require('../../lib/service/suite')
 
 tman.suite('service - suite', function () {
   let auth = new Auth({
