@@ -18,7 +18,6 @@ class Client {
     // Services provided by TWS authorization service
     this.auth = new services.Auth(options)
     this.user = new services.User(options)
-    this.suite = new services.Suite(options)
   }
 }
 
