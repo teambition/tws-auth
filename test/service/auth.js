@@ -4,10 +4,12 @@ const assert = require('power-assert')
 const MemoryStore = require('../../lib/cache/memory')
 const Auth = require('../../lib/service/auth')
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0
+
 tman.suite('service - auth', function () {
   let auth = new Auth({
     cacheStore: new MemoryStore(),
-    host: 'http://121.196.214.67:31090',
+    host: 'https://121.196.214.67:31090',
     appId: '59294da476d70b4b83fa91a5',
     appSecret: process.env.APP_SECRET,
     timeout: 30000
