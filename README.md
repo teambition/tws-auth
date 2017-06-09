@@ -53,3 +53,5 @@ const Client = require('tws-auth')
 #### Class Method: client.user.getById(_userId, token)
 
 #### Class Method: client.user.getByEmail(email, token)
+
+#### Class Method: client.user.batchGetbyIds(_ids, token)
