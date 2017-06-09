@@ -46,12 +46,12 @@ const Client = require('tws-auth')
 
 ### User methods
 
-#### Class Method: client.user.verifyCookie(cookie, signature, token)
+#### Class Method: client.user.verifyCookie(cookie, signature)
 
-#### Class Method: client.user.verifyToken(tokenToVerify, token)
+#### Class Method: client.user.verifyToken(tokenToVerify)
 
-#### Class Method: client.user.getById(_userId, token)
+#### Class Method: client.user.getById(_userId)
 
-#### Class Method: client.user.getByEmail(email, token)
+#### Class Method: client.user.getByEmail(email)
 
-#### Class Method: client.user.batchGetbyIds(_ids, token)
+#### Class Method: client.user.batchGetbyIds(_ids)

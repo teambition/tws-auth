@@ -1,6 +1,6 @@
 {
   "name": "tws-auth",
-  "version": "0.4.5",
+  "version": "0.5.0",
   "description": "Node.js SDK of TWS (Teambition Web Service) authorization service",
   "main": "index.js",
   "scripts": {
