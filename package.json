@@ -24,8 +24,9 @@
     "co": "^4.6.0",
     "http-errors": "^1.6.1",
     "jsonwebtoken": "^7.4.1",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
     "thunk-redis": "^2.1.0",
-    "urllib": "^2.22.0",
     "user-agent-composer": "^0.1.1",
     "validator": "^7.0.0"
   },
