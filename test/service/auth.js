@@ -7,6 +7,8 @@ const Auth = require('../../lib/service/auth')
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0
 
 tman.suite('service - auth', function () {
+  this.timeout(5000)
+
   let auth = new Auth({
     cacheStore: new MemoryStore(),
     host: 'https://121.196.214.67:31090',
