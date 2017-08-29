@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/teambition/tws-auth#readme",
   "dependencies": {
+    "app-root-path": "^2.0.1",
     "co": "^4.6.0",
     "http-errors": "^1.6.1",
     "jsonwebtoken": "^7.4.1",
