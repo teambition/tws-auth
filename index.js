@@ -1,9 +1,13 @@
 'use strict'
 
+const Client = require('./lib/client')
 const Store = require('./lib/cache/store')
-const Auth = require('./lib/service')
+const userSrv = require('./lib/service/user')
+const RedisStore = require('./lib/cache/redis')
+const MemoryStore = require('./lib/cache/memory')
+const { assertRes, assertResultOrError } = require('./lib/util/request')
 
-class Client extends Auth {
+class Auth extends Client {
   constructor (options) {
     super(options)
 
@@ -12,16 +16,12 @@ class Client extends Auth {
   }
 }
 
-Client.Auth = Auth
-Client.user = Auth.user
-Client.UA = require('./lib/util/ua')
+Auth.user = userSrv
+Auth.Client = Client
+Auth.Store = Store
+Auth.RedisStore = RedisStore
+Auth.MemoryStore = MemoryStore
+Auth.assertRes = assertRes
+Auth.assertResultWithError = assertResultOrError // compatibility, should remove
 
-Client.Store = Store
-Client.RedisStore = require('./lib/cache/redis')
-Client.MemoryStore = require('./lib/cache/memory')
-
-const { assertRes, assertResultWithError } = require('./lib/util/request')
-Client.assertRes = assertRes
-Client.assertResultWithError = assertResultWithError
-
-module.exports = Client
+module.exports = Auth

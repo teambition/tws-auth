@@ -89,7 +89,7 @@ suite('tws-auth', function () {
           '5109f1e918e6fcfc560001a7'
         ])
       } catch ({ error }) {
-        return assert(error.error, 'Not Found')
+        return assert(error, 'UserNotFound')
       }
 
       throw new Error('not throw')
