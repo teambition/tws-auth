@@ -1,24 +1,27 @@
 'use strict'
-const validator = require('validator')
+
+const Client = require('./lib/client')
 const Store = require('./lib/cache/store')
-const services = require('./lib/service')
+const userSrv = require('./lib/service/user')
+const RedisStore = require('./lib/cache/redis')
+const MemoryStore = require('./lib/cache/memory')
+const { assertRes, assertResultOrError } = require('./lib/util/request')
 
-class Client {
+class Auth extends Client {
   constructor (options) {
-    if (!validator.isMongoId(options.appId)) {
-      throw new Error(`appId: ${options.appId} is not a valid mongo id`)
-    }
-    if (options.cacheStore && !(options.cacheStore instanceof Store)) {
-      throw new TypeError('cacheStore should be an instance of Store')
-    }
+    super(options)
 
-    options.host = options.host || 'https://auth.teambitionapis.com'
-    options.timeout = options.timeout || 2000
-
-    // Services provided by TWS authorization service
-    this.auth = new services.Auth(options)
-    this.user = new services.User(options)
+    this.auth = this // compatibility
+    this.user = this.withObject(Auth.user)
   }
 }
 
-module.exports = Client
+Auth.user = userSrv
+Auth.Client = Client
+Auth.Store = Store
+Auth.RedisStore = RedisStore
+Auth.MemoryStore = MemoryStore
+Auth.assertRes = assertRes
+Auth.assertResultWithError = assertResultOrError // compatibility, should remove
+
+module.exports = Auth
