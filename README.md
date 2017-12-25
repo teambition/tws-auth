@@ -22,7 +22,7 @@ const Auth = require('tws-auth')
     appSecrets: ['app_secret_new', 'app_secret_old']
   })
 
-  console.log(await auth.authorize('59291f0178af6230601abecc', 'app'))
+  console.log(await auth.authorize('59291f0178af6230601abecc', 'self'))
 })()
 ```
 
@@ -61,15 +61,15 @@ const sdk.user = sdk.withObject(Auth.user)
 
 #### Class Method: client.verifyToken(token, options)
 
-#### Class Method: client.requestWithToken(method, url, data, token, assertFunc = assertRes)
+#### Class Method: client.requestWithToken(method, url, data, tokens, assertFunc = assertRes)
 
 #### Class Method: client.requestWithToken(options)
 
-#### Class Method: client.requestWithSelfToken(method, url, data, token, assertFunc = assertRes)
+#### Class Method: client.requestWithSelfToken(method, url, data, assertFunc = assertRes)
 
 #### Class Method: client.requestWithSelfToken(options)
 
-#### Class Method: client.authorize(_resourceId, resourceType)
+#### Class Method: client.authorize(_grantorId, grantorType)
 
 ### Class Auth
 
