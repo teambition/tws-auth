@@ -21,16 +21,15 @@ tman.suite('cache - redis', function () {
   })
 
   tman.it('should get the specfied value', function * () {
-    key = `${key}_get`
     assert((yield store.get(key)) === null)
     yield store.client.psetex(`${prefix}$${key}`, 2000, 'test_value')
     assert((yield store.get(key)) === 'test_value')
   })
 
   tman.it('should set the specifed value', function * () {
-    key = `${key}_set`
+    yield store.client.del(`${prefix}$${key}`)
     assert((yield store.get(key)) === null)
-    yield store.set(key, 'test_value', 2000)
+    yield store.set(key, 'test_value', 2)
     assert((yield store.get(key)) === 'test_value')
   })
 })

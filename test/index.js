@@ -19,6 +19,33 @@ suite('tws-auth', function () {
     timeout: 30000
   })
 
+  suite('client method', function () {
+    it('withService', function () {
+      let srv1 = client.withService({
+        echo: function () { return this }
+      })
+      assert.strictEqual(client.host, 'https://121.196.214.67:31090')
+      assert.strictEqual(client.host, srv1.host)
+      assert.strictEqual(client.host, srv1.echo().host)
+
+      let srv2 = client.withService({
+        echo: function () { return this }
+      }, 'https://test.org')
+      assert.strictEqual(client.host, 'https://121.196.214.67:31090')
+      assert.strictEqual(srv2.host, 'https://test.org')
+      assert.strictEqual(srv2.echo().host, 'https://test.org')
+      assert.notEqual(srv1, srv2)
+      assert.notEqual(srv1.echo, srv2.echo)
+    })
+
+    it('signToken, decodeToken, verifyToken', function () {
+      let token = client.signToken({user: 'tester'})
+      assert.strictEqual(client.decodeToken(token).user, 'tester')
+      assert.strictEqual(client.verifyToken(token).user, 'tester')
+      assert.throws(() => client.verifyToken(token + '0'))
+    })
+  })
+
   suite('service - auth', function () {
     it('authorize by type: self', function * () {
       let token = yield client.authorize('59294da476d70b4b83fa91a5', 'self')

@@ -19,7 +19,8 @@ const Auth = require('tws-auth')
   const auth = new Auth({
     host: 'https://auth.teambitionapis.com',
     appId: '78f95e92c06a546f7dab7327',
-    appSecrets: ['app_secret_new', 'app_secret_old']
+    appSecrets: ['app_secret_new', 'app_secret_old'],
+    cacheStore: new Auth.RedisStore({ addrs: ['127.0.0.1:6379'] }, 'TWS_AUTH')
   })
 
   console.log(await auth.authorize('59291f0178af6230601abecc', 'self'))
@@ -34,25 +35,23 @@ const Auth = require('tws-auth')
 const Client = require('tws-auth').Client
 ```
 
-#### new Client({ appId, appSecret, [host, timeout, cacheStore, rootCert, privateKey, certChain] })
+#### new Client({ appId, appSecret[, host, timeout, cacheStore, rootCert, privateKey, certChain] })
 
 - appId `String` : The ID of your TWS application.
-- appSecret: `String` : The secret password of your TWS application.
 - appSecrets: `[]String` : The secret passwords of your TWS application.
 - host `String` : Optional, host URL of TWS authorization service, by default is `'https://auth.teambitionapis.com'`.
 - timeout `Number` : Optional, requst timeout in milliseconds, by default is `2000`.
-- cacheStore `Object` : Optional, the cache store for TWS access token, if provided, it should be an instance of `require('tws-auth/cache/store')` .
+- cacheStore `Object` : Optional, the cache store for TWS access token, if provided, it should be an instance of `require('tws-auth/cache/store')`.
 - rootCert `Buffer` : Optional, the client root certificate.
 - privateKey `Buffer` : Optional, the client certificate private key.
 - certChain `Buffer` : Optional, the client certificate cert chain.
 
-#### Class Method: client.withObject(srvPrototype)
-Creates a new service from service prototype base on the client.
+#### Class Method: client.withService(servicePrototype[, servicehost])
+Creates a new service from service prototype base on the client. It will re-use auth service client!
 
 ```js
 const sdk = new Auth(options)
-const sdk.user = sdk.withObject(Auth.user)
-// const sdk.mySrv = sdk.withObject(mySrvPrototype)
+const someOtherSdk = sdk.withService(someServicePrototype, 'https://some-tws-apis.com')
 ```
 
 #### Class Method: client.signToken(payload, options)
@@ -94,7 +93,13 @@ Store class.
 
 #### Auth.RedisStore
 
+#### new Auth.RedisStore(options, prefix)
+
 RedisStore class.
+
+```js
+const cacheStore = new Auth.RedisStore({addrs: ['127.0.0.1:6379']}, 'TWS_AUTH')
+```
 
 #### Auth.MemoryStore
 
