@@ -16,7 +16,8 @@ suite('tws-auth', function () {
     host: 'https://121.196.214.67:31090',
     appId: '59294da476d70b4b83fa91a5',
     appSecret: process.env.APP_SECRET,
-    timeout: 30000
+    timeout: 30000,
+    time: true
   })
 
   suite('client method', function () {
@@ -89,11 +90,29 @@ suite('tws-auth', function () {
       throw new Error('not throw')
     })
 
+    it('checkCookie - invalid cookie', function * () {
+      let res = yield client.user.checkCookie('68e9721d-d823-d973-0d21-c14d7c29d213', 'xxxxxxx')
+      assert.equal(res.result, null)
+      assert.equal(res.error.error, 'Unauthorized')
+    })
+
+    it('checkToken - Unauthorized', function * () {
+      let res = yield client.user.checkToken('invalid-token')
+      assert.equal(res.result, null)
+      assert.equal(res.error.error, 'Unauthorized')
+    })
+
     it('getById - Resource Not Found', function * () {
       try {
         yield client.user.getById('5109f1e918e6fcfc560001a6')
-      } catch ({ message }) {
-        return assert(message, 'Resource Not Found')
+      } catch (err) {
+        assert.ok(err.originalUrl)
+        assert.ok(err.originalMethod)
+        assert.ok(err.headers)
+        assert.ok(err.elapsedTime > 0)
+        assert.ok(err.error)
+        assert.ok(err.message)
+        return
       }
 
       throw new Error('not throw')
@@ -102,8 +121,14 @@ suite('tws-auth', function () {
     it('getByEmail - Resource Not Found', function * () {
       try {
         yield client.user.getByEmail('test-not-found@email.email')
-      } catch ({ message }) {
-        return assert(message, 'Resource Not Found')
+      } catch (err) {
+        assert.ok(err.originalUrl)
+        assert.ok(err.originalMethod)
+        assert.ok(err.headers)
+        assert.ok(err.elapsedTime > 0)
+        assert.ok(err.error)
+        assert.ok(err.message)
+        return
       }
 
       throw new Error('not throw')
@@ -115,8 +140,14 @@ suite('tws-auth', function () {
           '5109f1e918e6fcfc560001a6',
           '5109f1e918e6fcfc560001a7'
         ])
-      } catch ({ error }) {
-        return assert(error, 'UserNotFound')
+      } catch (err) {
+        assert.ok(err.originalUrl)
+        assert.ok(err.originalMethod)
+        assert.ok(err.headers)
+        assert.ok(err.elapsedTime > 0)
+        assert.ok(err.error)
+        assert.ok(err.message)
+        return
       }
 
       throw new Error('not throw')

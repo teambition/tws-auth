@@ -111,9 +111,13 @@ assertRes function.
 
 ### User service methods
 
-#### auth.user.verifyCookie(cookie, signature)
+#### [deprecated] auth.user.verifyCookie(cookie, signature)
 
-#### auth.user.verifyToken(accessToken)
+#### [deprecated] auth.user.verifyToken(accessToken)
+
+#### auth.user.checkCookie(cookie, signature)
+
+#### auth.user.checkToken(accessToken)
 
 #### auth.user.getById(_userId)
 
