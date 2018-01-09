@@ -21,5 +21,6 @@ Auth.Store = Store
 Auth.RedisStore = RedisStore
 Auth.MemoryStore = MemoryStore
 Auth.assertRes = assertRes
+Auth.request = Client.request
 
 module.exports = Auth
