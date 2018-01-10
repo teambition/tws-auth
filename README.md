@@ -40,11 +40,16 @@ const Client = require('tws-auth').Client
 - appId `String` : The ID of your TWS application.
 - appSecrets: `[]String` : The secret passwords of your TWS application.
 - host `String` : Optional, host URL of TWS authorization service, by default is `'https://auth.teambitionapis.com'`.
-- timeout `Number` : Optional, requst timeout in milliseconds, by default is `2000`.
+- timeout `Number` : Optional, requst timeout in milliseconds, by default is `3000`.
 - cacheStore `Object` : Optional, the cache store for TWS access token, if provided, it should be an instance of `require('tws-auth/cache/store')`.
 - rootCert `Buffer` : Optional, the client root certificate.
 - privateKey `Buffer` : Optional, the client certificate private key.
 - certChain `Buffer` : Optional, the client certificate cert chain.
+- maxSockets `Number` : Optional, the client sockets.
+- time `Boolean` : Optional, enable timing for request.
+- retryDelay `Number` : Optional, delay time for retry, default to 200 ms.
+- maxAttempts `Number` : Optional, max attempts for a request, default to 3 times.
+- retryErrorCodes `[]String` : Optional, error codes that should retry, default to `['ECONNRESET', 'ENOTFOUND', 'ESOCKETTIMEDOUT', 'ETIMEDOUT', 'ECONNREFUSED', 'EHOSTUNREACH', 'EPIPE', 'EAI_AGAIN']`.
 
 #### Class Method: client.withService(servicePrototype[, servicehost])
 Creates a new service from service prototype base on the client. It will re-use auth service client!
