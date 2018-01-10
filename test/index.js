@@ -20,6 +20,73 @@ suite('tws-auth', function () {
     time: true
   })
 
+  // travis-ci 中测试有问题，目前只能本机测试
+  suite.skip('request', function () {
+    it('should work', function () {
+      return Auth.Client.request({
+        method: 'GET',
+        url: 'https://121.196.214.67:31090',
+        json: true
+      })
+      .then((res) => {
+        assert.strictEqual(res.statusCode, 200)
+        assert.strictEqual(res.attempts, 1)
+        assert.ok(res.body.Version)
+      })
+    })
+
+    it('request with max retry', function () {
+      return Auth.Client.request({
+        method: 'GET',
+        url: 'https://121.196.214.67:11111',
+        retryDelay: 300,
+        maxAttempts: 100
+      })
+      .then((res) => {
+        throw new Error('should no result')
+      })
+      .catch((err) => {
+        assert.strictEqual(err.code, 'ECONNREFUSED')
+        assert.strictEqual(err.attempts, 10)
+        assert.strictEqual(err.originalUrl, 'https://121.196.214.67:11111')
+        assert.strictEqual(err.originalMethod, 'GET')
+      })
+    })
+
+    it('request with default retry', function () {
+      return Auth.Client.request({
+        method: 'GET',
+        url: 'https://121.196.214.67:11111'
+      })
+      .then((res) => {
+        throw new Error('should no result')
+      })
+      .catch((err) => {
+        assert.strictEqual(err.code, 'ECONNREFUSED')
+        assert.strictEqual(err.attempts, 3)
+        assert.strictEqual(err.originalUrl, 'https://121.196.214.67:11111')
+        assert.strictEqual(err.originalMethod, 'GET')
+      })
+    })
+
+    it('request with no retry', function * () {
+      return Auth.Client.request({
+        method: 'GET',
+        url: 'https://121.196.214.67:11111',
+        maxAttempts: 1
+      })
+      .then((res) => {
+        throw new Error('should no result')
+      })
+      .catch((err) => {
+        assert.strictEqual(err.code, 'ECONNREFUSED')
+        assert.strictEqual(err.attempts, 1)
+        assert.strictEqual(err.originalUrl, 'https://121.196.214.67:11111')
+        assert.strictEqual(err.originalMethod, 'GET')
+      })
+    })
+  })
+
   suite('client method', function () {
     it('withService', function () {
       let srv1 = client.withService({
