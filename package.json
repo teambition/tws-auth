@@ -25,6 +25,7 @@
     "http-errors": "^1.6.2",
     "jsonwebtoken": "^8.1.0",
     "request": "^2.83.0",
+    "requestretry": "^1.12.2",
     "thunk-redis": "^2.1.6",
     "thunks": "^4.9.0",
     "user-agent-composer": "^0.1.1"
