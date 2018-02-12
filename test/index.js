@@ -11,14 +11,15 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0
 suite('tws-auth', function () {
   this.timeout(5000)
 
-  const client = new Auth({
+  const clientOptions = {
     cacheStore: new MemoryStore(),
     host: 'https://121.196.214.67:31090',
     appId: '59294da476d70b4b83fa91a5',
     appSecret: process.env.APP_SECRET,
     timeout: 30000,
     time: true
-  })
+  }
+  const client = new Auth(clientOptions)
 
   // travis-ci 中测试有问题，目前只能本机测试
   suite.skip('request', function () {
@@ -218,6 +219,26 @@ suite('tws-auth', function () {
       }
 
       throw new Error('not throw')
+    })
+  })
+
+  suite('constructor options', function () {
+    it('cacheKeyWithType - token should be same with the same cacheKeyWithType option', function * () {
+      const specificOptions = Object.assign({}, clientOptions, { cacheKeyWithType: false })
+      const specificClient = new Auth(specificOptions)
+
+      const clientToken = yield client.authorize('59294da476d70b4b83fa91a5', 'self')
+      const specificToken = yield specificClient.authorize('59294da476d70b4b83fa91a5', 'self')
+      assert.equal(clientToken, specificToken)
+    })
+
+    it('cacheKeyWithType - token should be different with different cacheKeyWithType option', function * () {
+      const specificOptions = Object.assign({}, clientOptions, { cacheKeyWithType: true })
+      const specificClient = new Auth(specificOptions)
+
+      const clientToken = yield client.authorize('59294da476d70b4b83fa91a5', 'self')
+      const specificToken = yield specificClient.authorize('59294da476d70b4b83fa91a5', 'self')
+      assert.notEqual(clientToken, specificToken)
     })
   })
 })
