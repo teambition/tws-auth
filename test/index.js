@@ -1,6 +1,7 @@
 'use strict'
 
 const { suite, it } = require('tman')
+const { thunk } = require('thunks')
 const assert = require('power-assert')
 
 const Auth = require('..')
@@ -228,6 +229,8 @@ suite('tws-auth', function () {
       const specificClient = new Auth(specificOptions)
 
       const clientToken = yield client.authorize('59294da476d70b4b83fa91a5', 'self')
+      yield thunk.delay(1000)
+
       const specificToken = yield specificClient.authorize('59294da476d70b4b83fa91a5', 'self')
       assert.equal(clientToken, specificToken)
     })
@@ -237,6 +240,8 @@ suite('tws-auth', function () {
       const specificClient = new Auth(specificOptions)
 
       const clientToken = yield client.authorize('59294da476d70b4b83fa91a5', 'self')
+      yield thunk.delay(1000)
+
       const specificToken = yield specificClient.authorize('59294da476d70b4b83fa91a5', 'self')
       assert.notEqual(clientToken, specificToken)
     })
