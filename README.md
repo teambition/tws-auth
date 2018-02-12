@@ -42,6 +42,7 @@ const Client = require('tws-auth').Client
 - host `String` : Optional, host URL of TWS authorization service, by default is `'https://auth.teambitionapis.com'`.
 - timeout `Number` : Optional, requst timeout in milliseconds, by default is `3000`.
 - cacheStore `Object` : Optional, the cache store for TWS access token, if provided, it should be an instance of `require('tws-auth/cache/store')`.
+- cacheKeyWithType `Boolean` : Optional, whether to generate cache key with `grantorType` when `client.authorize` be called.
 - rootCert `Buffer` : Optional, the client root certificate.
 - privateKey `Buffer` : Optional, the client certificate private key.
 - certChain `Buffer` : Optional, the client certificate cert chain.
