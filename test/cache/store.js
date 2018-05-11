@@ -12,12 +12,10 @@ tman.suite('cache - store', function () {
   })
 
   tman.it('should throw when not implement store.get()', function () {
-    assert.throws(() => store.get(),
-                  'store.get() should be implemented manually')
+    assert.throws(() => store.get('key'))
   })
 
   tman.it('should throw when not implement store.set()', function () {
-    assert.throws(() => store.set(),
-                  'store.set() should be implemented manually')
+    assert.throws(() => store.set('key', 'value', 1))
   })
 })
