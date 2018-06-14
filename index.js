@@ -3,6 +3,7 @@
 const Client = require('./lib/client')
 const Store = require('./lib/cache/store')
 const userSrv = require('./lib/service/user')
+const appSrv = require('./lib/service/app')
 const RedisStore = require('./lib/cache/redis')
 const MemoryStore = require('./lib/cache/memory')
 const { assertRes } = require('./lib/util/request')
@@ -16,6 +17,7 @@ class Auth extends Client {
 }
 
 Auth.user = userSrv
+Auth.app = appSrv
 Auth.Client = Client
 Auth.Store = Store
 Auth.RedisStore = RedisStore
