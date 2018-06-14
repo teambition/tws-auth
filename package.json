@@ -1,6 +1,6 @@
 {
   "name": "tws-auth",
-  "version": "2.2.7",
+  "version": "2.3.0",
   "description": "Node.js SDK of TWS (Teambition Web Service) authorization service",
   "main": "index.js",
   "scripts": {
@@ -23,14 +23,14 @@
   "dependencies": {
     "app-root-path": "^2.0.1",
     "http-errors": "^1.6.3",
-    "jsonwebtoken": "^8.2.1",
-    "request": "^2.85.0",
+    "jsonwebtoken": "^8.3.0",
+    "request": "^2.87.0",
     "thunk-redis": "^2.1.6",
     "thunks": "^4.9.2",
     "user-agent-composer": "^0.1.1"
   },
   "devDependencies": {
-    "power-assert": "^1.5.0",
+    "power-assert": "^1.6.0",
     "standard": "^11.0.1",
     "tman": "^1.7.4"
   }
