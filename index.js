@@ -13,6 +13,7 @@ class Auth extends Client {
     super(options)
 
     this.user = this.withService(Auth.user)
+    this.app = this.withService(Auth.app)
   }
 }
 
