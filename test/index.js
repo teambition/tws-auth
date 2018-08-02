@@ -8,14 +8,16 @@ const Auth = require('..')
 const MemoryStore = Auth.MemoryStore
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0
+const AUTH_SERVER = process.env.AUTH_SERVER || 'http://121.196.214.67:31090'
+const APP_ID = process.env.APP_ID || '59294da476d70b4b83fa91a5'
 
 suite('tws-auth', function () {
   this.timeout(5000)
 
   const clientOptions = {
     cacheStore: new MemoryStore(),
-    host: 'https://121.196.214.67:31090',
-    appId: '59294da476d70b4b83fa91a5',
+    host: AUTH_SERVER,
+    appId: APP_ID,
     appSecret: process.env.APP_SECRET,
     timeout: 30000,
     time: true
@@ -27,7 +29,7 @@ suite('tws-auth', function () {
     it('should work', function () {
       return Auth.Client.request({
         method: 'GET',
-        url: 'https://121.196.214.67:31090',
+        url: AUTH_SERVER,
         json: true
       })
         .then((res) => {
@@ -40,7 +42,7 @@ suite('tws-auth', function () {
     it('request with max retry', function () {
       return Auth.Client.request({
         method: 'GET',
-        url: 'https://121.196.214.67:11111',
+        url: AUTH_SERVER,
         retryDelay: 300,
         maxAttempts: 100
       })
@@ -50,7 +52,7 @@ suite('tws-auth', function () {
         .catch((err) => {
           assert.strictEqual(err.code, 'ECONNREFUSED')
           assert.strictEqual(err.attempts, 10)
-          assert.strictEqual(err.originalUrl, 'https://121.196.214.67:11111')
+          assert.strictEqual(err.originalUrl, AUTH_SERVER)
           assert.strictEqual(err.originalMethod, 'GET')
         })
     })
@@ -58,7 +60,7 @@ suite('tws-auth', function () {
     it('request with default retry', function () {
       return Auth.Client.request({
         method: 'GET',
-        url: 'https://121.196.214.67:11111'
+        url: AUTH_SERVER
       })
         .then((res) => {
           throw new Error('should no result')
@@ -66,7 +68,7 @@ suite('tws-auth', function () {
         .catch((err) => {
           assert.strictEqual(err.code, 'ECONNREFUSED')
           assert.strictEqual(err.attempts, 3)
-          assert.strictEqual(err.originalUrl, 'https://121.196.214.67:11111')
+          assert.strictEqual(err.originalUrl, AUTH_SERVER)
           assert.strictEqual(err.originalMethod, 'GET')
         })
     })
@@ -74,7 +76,7 @@ suite('tws-auth', function () {
     it('request with no retry', function * () {
       return Auth.Client.request({
         method: 'GET',
-        url: 'https://121.196.214.67:11111',
+        url: AUTH_SERVER,
         maxAttempts: 1
       })
         .then((res) => {
@@ -83,7 +85,7 @@ suite('tws-auth', function () {
         .catch((err) => {
           assert.strictEqual(err.code, 'ECONNREFUSED')
           assert.strictEqual(err.attempts, 1)
-          assert.strictEqual(err.originalUrl, 'https://121.196.214.67:11111')
+          assert.strictEqual(err.originalUrl, AUTH_SERVER)
           assert.strictEqual(err.originalMethod, 'GET')
         })
     })
@@ -94,14 +96,14 @@ suite('tws-auth', function () {
       let srv1 = client.withService({
         echo: function () { return this }
       })
-      assert.strictEqual(client.host, 'https://121.196.214.67:31090')
+      assert.strictEqual(client.host, AUTH_SERVER)
       assert.strictEqual(client.host, srv1.host)
       assert.strictEqual(client.host, srv1.echo().host)
 
       let srv2 = client.withService({
         echo: function () { return this }
       }, 'https://test.org')
-      assert.strictEqual(client.host, 'https://121.196.214.67:31090')
+      assert.strictEqual(client.host, AUTH_SERVER)
       assert.strictEqual(srv2.host, 'https://test.org')
       assert.strictEqual(srv2.echo().host, 'https://test.org')
       assert.notEqual(srv1, srv2)
@@ -118,7 +120,7 @@ suite('tws-auth', function () {
 
   suite('service - auth', function () {
     it('authorize by type: self', function * () {
-      let token = yield client.authorize('59294da476d70b4b83fa91a5', 'self')
+      let token = yield client.authorize(APP_ID, 'self')
       assert(token.length !== 0)
     })
 
@@ -130,7 +132,7 @@ suite('tws-auth', function () {
 
   suite('service - user', function () {
     it('authorize by type: self', function * () {
-      let token = yield client.user.authorize('59294da476d70b4b83fa91a5', 'self')
+      let token = yield client.user.authorize(APP_ID, 'self')
       assert(token.length !== 0)
     })
 
@@ -173,7 +175,7 @@ suite('tws-auth', function () {
 
     it('getById - Resource Not Found', function * () {
       try {
-        yield client.user.getById('5109f1e918e6fcfc560001a6')
+        yield client.user.getById('5109f1e918e6fcfc560001a7')
       } catch (err) {
         assert.ok(err.originalUrl)
         assert.ok(err.originalMethod)
@@ -206,8 +208,8 @@ suite('tws-auth', function () {
     it('batchGetbyIds', function * () {
       try {
         yield client.user.batchGetbyIds([
-          '5109f1e918e6fcfc560001a6',
-          '5109f1e918e6fcfc560001a7'
+          '5109f1e918e6fcfc560001a7',
+          '5109f1e918e6fcfc560001a8'
         ])
       } catch (err) {
         assert.ok(err.originalUrl)
@@ -228,10 +230,10 @@ suite('tws-auth', function () {
       const specificOptions = Object.assign({}, clientOptions, { cacheKeyWithType: false })
       const specificClient = new Auth(specificOptions)
 
-      const clientToken = yield client.authorize('59294da476d70b4b83fa91a5', 'self')
+      const clientToken = yield client.authorize(APP_ID, 'self')
       yield thunk.delay(1000)
 
-      const specificToken = yield specificClient.authorize('59294da476d70b4b83fa91a5', 'self')
+      const specificToken = yield specificClient.authorize(APP_ID, 'self')
       assert.equal(clientToken, specificToken)
     })
 
@@ -239,10 +241,10 @@ suite('tws-auth', function () {
       const specificOptions = Object.assign({}, clientOptions, { cacheKeyWithType: true })
       const specificClient = new Auth(specificOptions)
 
-      const clientToken = yield client.authorize('59294da476d70b4b83fa91a5', 'self')
+      const clientToken = yield client.authorize(APP_ID, 'self')
       yield thunk.delay(1000)
 
-      const specificToken = yield specificClient.authorize('59294da476d70b4b83fa91a5', 'self')
+      const specificToken = yield specificClient.authorize(APP_ID, 'self')
       assert.notEqual(clientToken, specificToken)
     })
   })
