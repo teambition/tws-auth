@@ -10,4 +10,6 @@ cache:
 services:
   - redis-server
 
-script: npm test
+script:
+  - npm run lint
+  - npm test
