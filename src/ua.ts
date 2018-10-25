@@ -1,5 +1,4 @@
 'use strict'
-/// <reference types="type.d.ts" />
 
 import appRoot from 'app-root-path'
 import Composer from 'user-agent-composer'

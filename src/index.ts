@@ -1,14 +1,14 @@
 'use strict'
 
+import authSrv from './service/auth'
 import { Client, ClientOptions } from './client'
-import * as userSrv from './service/user'
 
 class Auth extends Client {
-  readonly user: Client & typeof userSrv
+  readonly auth: Client & typeof authSrv
   constructor (options: ClientOptions) {
     super(options)
 
-    this.user = this.withService(userSrv)
+    this.auth = this.withService(authSrv)
   }
 }
 
