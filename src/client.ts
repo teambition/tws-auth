@@ -2,7 +2,6 @@
 
 import request from 'request'
 import jwt from 'jsonwebtoken'
-import { thunk } from 'thunks'
 import createError from 'http-errors'
 import { resolve as urlResolve } from 'url'
 import { UA } from './ua'
@@ -46,39 +45,45 @@ export type Response = request.Response & RetryResponse
 
 // teambition auth service client
 export class Client {
-  public static request (options: RequestOptions & request.UrlOptions): Promise<Response> {
-    return thunk.promise<Response>(function * () {
-      let err = null
-      let attempts = 0
-      const retryDelay = options.retryDelay != null ? Math.floor(options.retryDelay) : 300
-      const maxAttempts = options.maxAttempts != null ? Math.min(Math.floor(options.maxAttempts), 10) : 3
-      const retryErrorCodes = Array.isArray(options.retryErrorCodes) ? options.retryErrorCodes : RETRIABLE_ERRORS
+  public static async request (options: RequestOptions & request.UrlOptions): Promise<Response> {
+    const retryDelay = options.retryDelay != null ? Math.floor(options.retryDelay) : 300
+    const maxAttempts = options.maxAttempts != null ? Math.min(Math.floor(options.maxAttempts), 10) : 3
+    const retryErrorCodes = Array.isArray(options.retryErrorCodes) ? options.retryErrorCodes : RETRIABLE_ERRORS
 
-      while (attempts < maxAttempts) {
-        attempts++
+    let err = null
+    let attempts = 0
+    while (attempts < maxAttempts) {
+      attempts++
 
-        try {
-          const res = yield (done: (err: any) => void) => request(options, done)
-          // res: [response, body]
-          return Object.assign(res[0], {
-            attempts,
-            originalUrl: options.url,
-            originalMethod: options.method,
+      try {
+        const res = await new Promise<request.Response>((resolve, reject) => {
+          request(options, (error: any, response: request.Response, _body: any) => {
+            if (error != null) {
+              reject(error)
+            } else {
+              resolve(response)
+            }
           })
-        } catch (e) {
-          err = e
-          if (!retryErrorCodes.includes(e.code)) {
-            break
-          }
-          yield (done: () => void) => $setTimeout(done, retryDelay)
-        }
-      }
+        })
 
-      throw Object.assign(err, {
-        attempts,
-        originalUrl: options.url,
-        originalMethod: options.method,
-      })
+        return Object.assign(res, {
+          attempts,
+          originalUrl: options.url as string,
+          originalMethod: options.method as string,
+        })
+      } catch (e) {
+        err = e
+        if (!retryErrorCodes.includes(e.code)) {
+          break
+        }
+        await delay(retryDelay)
+      }
+    }
+
+    throw Object.assign(err, {
+      attempts,
+      originalUrl: options.url,
+      originalMethod: options.method,
     })
   }
 
@@ -197,9 +202,10 @@ export class Client {
     throw createError(401, error)
   }
 
-  request<T> (method: string, url: string, data?: any): Promise<T> {
-    const exp = 3600 + 600
-    const iat = Math.floor(Date.now() / (1000 * 3600)) * 3600 // token change in every hour
+  request (method: string, url: string, data?: any) {
+    const iat = Math.floor(Date.now() / (1000 * 3600)) * 3600
+    const exp = iat + 3660
+    // token change in every hour
     const token = this.signToken({ _appId: this._options.appId, iat, exp })
     const options: RequestOptions & request.UrlOptions = Object.assign({ url: '' }, this._requestOptions)
 
@@ -215,40 +221,40 @@ export class Client {
         options.body = data
       }
     }
-    return Client.request(options).then(assertRes) as Promise<T>
+    return Client.request(options)
   }
 
-  post<T> (url: string, data?: any): Promise<T> {
-    return this.request<T>('POST', url, data)
+  get<T> (url: string, data?: any) {
+    return this.request('GET', url, data).then(assertRes) as Promise<T>
   }
 
-  put<T> (url: string, data?: any): Promise<T> {
-    return this.request<T>('PUT', url, data)
+  post<T> (url: string, data?: any) {
+    return this.request('POST', url, data).then(assertRes) as Promise<T>
   }
 
-  patch<T> (url: string, data?: any): Promise<T> {
-    return this.request<T>('PATCH', url, data)
+  put<T> (url: string, data?: any) {
+    return this.request('PUT', url, data).then(assertRes) as Promise<T>
   }
 
-  get<T> (url: string, data?: any): Promise<T> {
-    return this.request<T>('GET', url, data)
+  patch<T> (url: string, data?: any) {
+    return this.request('PATCH', url, data).then(assertRes) as Promise<T>
   }
 
-  delete<T> (url: string, data?: any): Promise<T> {
-    return this.request<T>('DELETE', url, data)
-  }
-
-  head (url: string): Promise<null> {
-    return this.request('HEAD', url)
+  delete<T> (url: string, data?: any) {
+    return this.request('DELETE', url, data).then(assertRes) as Promise<T>
   }
 }
 
-export function isOk (res: request.RequestResponse) {
+export function isSuccess (res: request.RequestResponse) {
   return res.statusCode >= 200 && res.statusCode < 300
 }
 
+export function delay (ms: number) {
+  return new Promise((resolve) => $setTimeout(resolve, ms))
+}
+
 export function assertRes (res: Response): any {
-  if (isOk(res)) {
+  if (isSuccess(res)) {
     return res.body
   }
 

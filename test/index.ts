@@ -1,17 +1,18 @@
 'use strict'
 
-import { suite, it, Suite, before, after } from 'tman'
-import assert from 'assert'
 import http from 'http'
+import { AddressInfo } from 'net'
+import assert from 'assert'
+import querystring from 'querystring'
+import { suite, it, Suite, before, after } from 'tman'
 import Auth from '../src'
-import { Client, Payload } from '../src'
-import { AddressInfo } from 'net';
+import { Client, Payload, isSuccess, delay } from '../src'
 
 suite('tws-auth', function (this: Suite) {
   this.timeout(5000)
 
   suite('Client.request', function () {
-    it('should work', function * () {
+    it('should work', async function () {
       const server = http.createServer((_req, res) => {
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json; charset=utf-8')
@@ -20,21 +21,19 @@ suite('tws-auth', function (this: Suite) {
       server.listen()
       const addr = server.address() as AddressInfo
 
-      yield Client.request({
+      const response = await Client.request({
         method: 'GET',
         url: `http://127.0.0.1:${addr.port}`,
         json: true,
       })
-        .then((res) => {
-          assert.strictEqual(res.statusCode, 200)
-          assert.strictEqual(res.attempts, 1)
-          assert.strictEqual(res.body.result, 'ok')
-        })
+      assert.strictEqual(response.statusCode, 200)
+      assert.strictEqual(response.attempts, 1)
+      assert.strictEqual(response.body.result, 'ok')
 
       server.close()
     })
 
-    it('request with max retry', function * () {
+    it('request with max retry', async function () {
       const server = http.createServer((_req, res) => {
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json; charset=utf-8')
@@ -44,7 +43,7 @@ suite('tws-auth', function (this: Suite) {
       const addr = server.address() as AddressInfo
       server.close()
 
-      yield Client.request({
+      await Client.request({
         method: 'GET',
         url: `http://127.0.0.1:${addr.port}`,
         retryDelay: 300,
@@ -61,7 +60,7 @@ suite('tws-auth', function (this: Suite) {
         })
     })
 
-    it('request with default retry', function * () {
+    it('request with default retry', async function () {
       const server = http.createServer((_req, res) => {
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json; charset=utf-8')
@@ -71,7 +70,7 @@ suite('tws-auth', function (this: Suite) {
       const addr = server.address() as AddressInfo
       server.close()
 
-      yield Client.request({
+      await Client.request({
         method: 'GET',
         url: `http://127.0.0.1:${addr.port}`,
       })
@@ -86,7 +85,7 @@ suite('tws-auth', function (this: Suite) {
         })
     })
 
-    it('request with no retry', function * () {
+    it('request with no retry', async function () {
       const server = http.createServer((_req, res) => {
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json; charset=utf-8')
@@ -96,7 +95,7 @@ suite('tws-auth', function (this: Suite) {
       const addr = server.address() as AddressInfo
       server.close()
 
-      yield Client.request({
+      await Client.request({
         method: 'GET',
         url: `http://127.0.0.1:${addr.port}`,
         maxAttempts: 1,
@@ -279,83 +278,153 @@ suite('tws-auth', function (this: Suite) {
       server.close()
     })
 
-    it('request', function * () {
-      yield cli.request<Body>('GET', '/abc').then((body) => {
-        assert.strictEqual(body.method, 'GET')
-        assert.strictEqual(body.url, '/abc')
-      })
+    it('request should ok', async function () {
+      const res = await cli.request('GET', '/abc')
+      assert.ok(isSuccess(res))
+      assert.strictEqual(res.attempts, 1)
+      assert.ok(res.originalUrl)
+      assert.strictEqual(res.originalMethod, 'GET')
+
+      assert.strictEqual(res.body.method, 'GET')
+      assert.strictEqual(res.body.url, '/abc')
+
+      assert.ok(res.body.headers['user-agent'])
+      assert.ok(res.body.headers['user-agent'].startsWith('tws-auth'))
+      assert.ok(res.body.headers.authorization)
+      assert.ok(res.body.headers.authorization.startsWith('Bearer'))
+
+      assert.ok(cli.verifyToken(res.body.headers.authorization.slice(7)))
     })
 
-    it('post', function * () {
-      yield cli.post<Body>('/abc').then((body) => {
-        assert.strictEqual(body.method, 'POST')
-        assert.strictEqual(body.url, '/abc')
-      })
+    it('request should work with withQuery', async function () {
+      const res0 = await cli.withQuery({ _id: 'xyz' }).request('GET', '/abc')
+      assert.ok(isSuccess(res0))
+      assert.strictEqual(res0.body.url, '/abc?_id=xyz')
+
+      const res1 = await cli.withQuery({ _id: 'xyz' }).request('GET', '/abc?q=x', { type: 'user' })
+      assert.ok(isSuccess(res1))
+      const qs = querystring.parse(res1.body.url.slice(5))
+      assert.deepStrictEqual(Object.assign({}, qs), { q: 'x', _id: 'xyz', type: 'user' })
+
+      const res2 = await cli.request('GET', '/abc')
+      assert.ok(isSuccess(res2))
+      assert.strictEqual(res2.body.url, '/abc')
     })
 
-    it('put', function * () {
-      yield cli.put<Body>('/abc').then((body) => {
-        assert.strictEqual(body.method, 'PUT')
-        assert.strictEqual(body.url, '/abc')
-      })
+    it('request should work with withHeaders', async function () {
+      const res0 = await cli.withTenant('xyz', 'org').withOperator('tom').request('GET', '/abc')
+      assert.ok(isSuccess(res0))
+      assert.strictEqual(res0.body.headers['x-tenant-id'], 'xyz')
+      assert.strictEqual(res0.body.headers['x-tenant-type'], 'org')
+      assert.strictEqual(res0.body.headers['x-operator-id'], 'tom')
+
+      const res1 = await cli.withOperator('tom').request('GET', '/abc')
+      assert.ok(isSuccess(res1))
+      assert.strictEqual(res1.body.headers['x-tenant-id'], undefined)
+      assert.strictEqual(res1.body.headers['x-tenant-type'], undefined)
+      assert.strictEqual(res1.body.headers['x-operator-id'], 'tom')
     })
 
-    it('patch', function * () {
-      yield cli.patch<Body>('/abc').then((body) => {
-        assert.strictEqual(body.method, 'PATCH')
-        assert.strictEqual(body.url, '/abc')
-      })
+    it('request should work with withOptions', async function () {
+      const res0 = await cli.withOptions({
+        headers: { 'x-callback-url': 'http://test.com' },
+        qs: { q: 'test' },
+      }).request('GET', '/abc')
+      assert.ok(isSuccess(res0))
+      assert.strictEqual(res0.body.headers['x-callback-url'], 'http://test.com')
+      assert.strictEqual(res0.body.url, '/abc?q=test')
+
+      const res1 = await cli.withOptions({ method: 'GET' }).request('POST', '/abc')
+      assert.ok(isSuccess(res1))
+      assert.strictEqual(res1.body.headers['x-callback-url'], undefined)
+      assert.strictEqual(res1.body.method, 'POST')
+      assert.strictEqual(res1.body.url, '/abc')
     })
 
-    it('get', function * () {
-      yield cli.get<Body>('/abc').then((body) => {
-        assert.strictEqual(body.method, 'GET')
-        assert.strictEqual(body.url, '/abc')
-      })
+    it('request should use the same token in a time', async function () {
+      const res0 = await cli.request('GET', '/abc')
+      assert.ok(isSuccess(res0))
+      assert.ok(res0.body.headers.authorization.startsWith('Bearer'))
+
+      await delay(1500)
+      const res1 = await cli.request('GET', '/abc')
+      assert.ok(isSuccess(res1))
+      assert.strictEqual(res1.body.headers.authorization, res0.body.headers.authorization)
+
+      await delay(600)
+      const res2 = await cli.request('GET', '/abc')
+      assert.ok(isSuccess(res1))
+      assert.strictEqual(res2.body.headers.authorization, res0.body.headers.authorization)
     })
 
-    it('delete', function * () {
-      yield cli.delete<Body>('/abc').then((body) => {
-        assert.strictEqual(body.method, 'DELETE')
-        assert.strictEqual(body.url, '/abc')
-      })
+    it('post should ok', async function () {
+      const body = await cli
+        .withTenant('xyz', 'org')
+        .withOperator('tom')
+        .post<Body>('/abc')
+      assert.strictEqual(body.method, 'POST')
+      assert.strictEqual(body.url, '/abc')
+      assert.strictEqual(body.headers['x-tenant-id'], 'xyz')
+      assert.strictEqual(body.headers['x-tenant-type'], 'org')
+      assert.strictEqual(body.headers['x-operator-id'], 'tom')
     })
 
-    it('head', function * () {
-      yield cli.head('/abc')
+    it('put should ok', async function () {
+      const body = await cli.put<Body>('/abc')
+      assert.strictEqual(body.method, 'PUT')
+      assert.strictEqual(body.url, '/abc')
+    })
+
+    it('patch should ok', async function () {
+      const body = await cli.patch<Body>('/abc')
+      assert.strictEqual(body.method, 'PATCH')
+      assert.strictEqual(body.url, '/abc')
+    })
+
+    it('get should ok', async function () {
+      const body = await cli.get<Body>('/abc')
+      assert.strictEqual(body.method, 'GET')
+      assert.strictEqual(body.url, '/abc')
+    })
+
+    it('delete should ok', async function () {
+      const body = await cli.delete<Body>('/abc')
+      assert.strictEqual(body.method, 'DELETE')
+      assert.strictEqual(body.url, '/abc')
     })
   })
 
-  if (process.env.APP_SECRET == null) {
-    return
-  }
-
-  suite('user service', function () {
+  suite('auth service', function () {
     let cli: Auth
+
+    if (process.env.APP_SECRET == null) {
+      return
+    }
 
     before(function () {
       cli = new Auth({
         appId: process.env.APP_ID as string,
         appSecrets: [process.env.APP_SECRET as string],
-        host: process.env.HOST as string,
+        host: process.env.AUTH_SERVER as string,
+        time: true,
       })
     })
 
-    it('checkCookie - invalid cookie', function * () {
-      const res = yield cli.user.checkCookie('68e9721d-d823-d973-0d21-c14d7c29d213', 'xxxxxxx')
+    it('checkCookie - invalid cookie', async function () {
+      const res = await cli.auth.checkUserCookie<{ result: any, error: any }>('68e9721d-d823-d973-0d21-c14d7c29d213', 'xxxxxxx')
       assert.equal(res.result, null)
       assert.equal(res.error.error, 'Unauthorized')
     })
 
-    it('checkToken - Unauthorized', function * () {
-      const res = yield cli.user.checkToken('invalid-token')
+    it('checkToken - Unauthorized', async function () {
+      const res = await cli.auth.checkUserToken<{ result: any, error: any }>('invalid-token')
       assert.equal(res.result, null)
       assert.equal(res.error.error, 'Unauthorized')
     })
 
-    it('getById - Resource Not Found', function * () {
+    it('getById - Resource Not Found', async function () {
       try {
-        yield cli.user.getById('5109f1e918e6fcfc560001a7')
+        await cli.auth.getUserById('5109f1e918e6fcfc560001a7')
       } catch (err) {
         assert.ok(err.originalUrl)
         assert.ok(err.originalMethod)
@@ -369,9 +438,9 @@ suite('tws-auth', function (this: Suite) {
       throw new Error('not throw')
     })
 
-    it('getByEmail - Resource Not Found', function * () {
+    it('getByEmail - Resource Not Found', async function () {
       try {
-        yield cli.user.getByEmail('test-not-found@email.email')
+        await cli.auth.getUserByEmail('test-not-found@email.email')
       } catch (err) {
         assert.ok(err.originalUrl)
         assert.ok(err.originalMethod)
@@ -385,12 +454,12 @@ suite('tws-auth', function (this: Suite) {
       throw new Error('not throw')
     })
 
-    it('batchGetbyIds', function * () {
+    it('batchGetbyIds', async function () {
       try {
-        yield cli.user.batchGetbyIds([
+        await cli.auth.getUsersbyIds([
           '5109f1e918e6fcfc560001a7',
           '5109f1e918e6fcfc560001a8',
-        ], { fields: '_id' })
+        ])
       } catch (err) {
         assert.ok(err.originalUrl)
         assert.ok(err.originalMethod)
