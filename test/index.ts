@@ -5,11 +5,11 @@ import { AddressInfo } from 'net'
 import assert from 'assert'
 import querystring from 'querystring'
 import { suite, it, Suite, before, after } from 'tman'
-import Auth from '../src'
+import { TWS } from '../src'
 import { Client, Payload, isSuccess, delay } from '../src'
 
 suite('tws-auth', function (this: Suite) {
-  this.timeout(5000)
+  this.timeout(10000)
 
   suite('Client.request', function () {
     it('should work', async function () {
@@ -47,14 +47,14 @@ suite('tws-auth', function (this: Suite) {
         method: 'GET',
         url: `http://127.0.0.1:${addr.port}`,
         retryDelay: 300,
-        maxAttempts: 10,
+        maxAttempts: 5,
       })
         .then((_res) => {
           throw new Error('should no result')
         })
         .catch((err) => {
           assert.strictEqual(err.code, 'ECONNREFUSED')
-          assert.strictEqual(err.attempts, 10)
+          assert.strictEqual(err.attempts, 5)
           assert.strictEqual(err.originalUrl, `http://127.0.0.1:${addr.port}`)
           assert.strictEqual(err.originalMethod, 'GET')
         })
@@ -139,7 +139,7 @@ suite('tws-auth', function (this: Suite) {
       })
 
       assert.ok(cli)
-      assert.equal(Client.request, Auth.request)
+      assert.equal(Client.request, TWS.request)
     })
 
     it('withService', function () {
@@ -395,14 +395,14 @@ suite('tws-auth', function (this: Suite) {
   })
 
   suite('auth service', function () {
-    let cli: Auth
+    let cli: TWS
 
     if (process.env.APP_SECRET == null) {
       return
     }
 
     before(function () {
-      cli = new Auth({
+      cli = new TWS({
         appId: process.env.APP_ID as string,
         appSecrets: [process.env.APP_SECRET as string],
         host: process.env.AUTH_SERVER as string,
@@ -411,20 +411,20 @@ suite('tws-auth', function (this: Suite) {
     })
 
     it('checkCookie - invalid cookie', async function () {
-      const res = await cli.auth.checkUserCookie<{ result: any, error: any }>('68e9721d-d823-d973-0d21-c14d7c29d213', 'xxxxxxx')
+      const res = await cli.authSrv.checkUserCookie<{ result: any, error: any }>('68e9721d-d823-d973-0d21-c14d7c29d213', 'xxxxxxx')
       assert.equal(res.result, null)
       assert.equal(res.error.error, 'Unauthorized')
     })
 
     it('checkToken - Unauthorized', async function () {
-      const res = await cli.auth.checkUserToken<{ result: any, error: any }>('invalid-token')
+      const res = await cli.authSrv.checkUserToken<{ result: any, error: any }>('invalid-token')
       assert.equal(res.result, null)
       assert.equal(res.error.error, 'Unauthorized')
     })
 
     it('getById - Resource Not Found', async function () {
       try {
-        await cli.auth.getUserById('5109f1e918e6fcfc560001a7')
+        await cli.authSrv.getUserById('5109f1e918e6fcfc560001a7')
       } catch (err) {
         assert.ok(err.originalUrl)
         assert.ok(err.originalMethod)
@@ -440,7 +440,7 @@ suite('tws-auth', function (this: Suite) {
 
     it('getByEmail - Resource Not Found', async function () {
       try {
-        await cli.auth.getUserByEmail('test-not-found@email.email')
+        await cli.authSrv.getUserByEmail('test-not-found@email.email')
       } catch (err) {
         assert.ok(err.originalUrl)
         assert.ok(err.originalMethod)
@@ -456,7 +456,7 @@ suite('tws-auth', function (this: Suite) {
 
     it('batchGetbyIds', async function () {
       try {
-        await cli.auth.getUsersbyIds([
+        await cli.authSrv.getUsersbyIds([
           '5109f1e918e6fcfc560001a7',
           '5109f1e918e6fcfc560001a8',
         ])

@@ -12,18 +12,27 @@ const MONGO_REG = /^[0-9a-f]{24}$/i
 const RETRIABLE_ERRORS = ['ECONNRESET', 'ENOTFOUND',
   'ESOCKETTIMEDOUT', 'ETIMEDOUT', 'ECONNREFUSED', 'EHOSTUNREACH', 'EPIPE', 'EAI_AGAIN']
 
+/**
+ * Options for request retrying.
+ */
 export interface RetryOptions {
-  retryDelay?: number
-  maxAttempts?: number
+  retryDelay?: number // (default) wait for 2000 ms before trying again
+  maxAttempts?: number // (default) try 3 times
   retryErrorCodes?: string[]
 }
 
-export interface RetryResponse {
+/**
+ * Extra attributes for response.
+ */
+export interface ExtraResponse {
   attempts: number
   originalUrl: string
   originalMethod: string
 }
 
+/**
+ * Options for request Client.
+ */
 export interface ClientOptions {
   appId: string
   appSecrets: string[]
@@ -41,13 +50,23 @@ export interface ClientOptions {
 export interface Payload { [key: string]: any }
 
 export type RequestOptions = request.CoreOptions & RetryOptions
-export type Response = request.Response & RetryResponse
+export type Response = request.Response & ExtraResponse
 
-// teambition auth service client
+/**
+ * Client for teambition web service.
+ */
 export class Client {
+  /**
+   * a retryable request, wrap of https://github.com/request/request.
+   * When the connection fails with one of ECONNRESET, ENOTFOUND, ESOCKETTIMEDOUT, ETIMEDOUT,
+   * ECONNREFUSED, EHOSTUNREACH, EPIPE, EAI_AGAIN, the request will automatically be re-attempted as
+   * these are often recoverable errors and will go away on retry.
+   * @param options request options.
+   * @returns a promise with Response.
+   */
   public static async request (options: RequestOptions & request.UrlOptions): Promise<Response> {
-    const retryDelay = options.retryDelay != null ? Math.floor(options.retryDelay) : 300
-    const maxAttempts = options.maxAttempts != null ? Math.min(Math.floor(options.maxAttempts), 10) : 3
+    const retryDelay = options.retryDelay != null ? Math.floor(options.retryDelay) : 2000
+    const maxAttempts = options.maxAttempts != null ? Math.floor(options.maxAttempts) : 3
     const retryErrorCodes = Array.isArray(options.retryErrorCodes) ? options.retryErrorCodes : RETRIABLE_ERRORS
 
     let err = null
@@ -127,69 +146,132 @@ export class Client {
     } as RequestOptions
   }
 
+  /**
+   * @returns host on the client.
+   */
   get host () {
     return this._host
   }
 
+  /**
+   * @returns preset headers on the client.
+   */
   get headers () {
     return this._headers
   }
 
+  /**
+   * @returns preset query on the client.
+   */
   get query () {
     return this._query
   }
 
+  /**
+   * @returns preset request options on the client.
+   */
   get requestOptions () {
     return this._requestOptions
   }
 
-  withService<T> (servicePrototype: T, servicehost: string = ''): this & T {
-    const srv = Object.assign<this, T>(Object.create(this), servicePrototype)
+  /**
+   * Creates (by Object.create) a **new client** instance with given service methods.
+   * @param servicePrototype service methods that will be mount to client.
+   * @param servicehost service host for new client.
+   * @returns a **new client** with with given service methods.
+   */
+  withService<T> (serviceMethod: T, servicehost: string = ''): this & T {
+    const srv = Object.assign<this, T>(Object.create(this), serviceMethod)
     if (servicehost !== '') {
       srv._host = servicehost
     }
     return srv
   }
 
+  /**
+   * Creates (by Object.create) a **new client** instance with given request options.
+   * @param options request options that will be copy into client.
+   * @returns a **new client** with with given request options.
+   */
   withOptions (options: RequestOptions): this {
     return Object.assign(Object.create(this), {
       _requestOptions: Object.assign({}, this._requestOptions, options),
     })
   }
 
+  /**
+   * Creates (by Object.create) a **new client** instance with given headers.
+   * @param headers headers that will be copy into client.
+   * @returns a **new client** with with given headers.
+   */
   withHeaders (headers: Payload): this {
     return Object.assign(Object.create(this), {
       _headers: Object.assign({}, this._headers, headers),
     })
   }
 
+  /**
+   * Creates (by Object.create) a **new client** instance with given query.
+   * @param query query that will be copy into client.
+   * @returns a **new client** with with given query.
+   */
   withQuery (query: Payload): this {
     return Object.assign(Object.create(this), {
       _query: Object.assign({}, this._query, query),
     })
   }
 
-  withTenant (_tenantId: string, TenantType = 'organization') {
+  /**
+   * Creates (by withHeaders) a **new client** instance with given `X-Tenant-Id` and `X-Tenant-Type`.
+   * @param tenantId that will be added to header as `X-Tenant-Id`.
+   * @param tenantType that will be added to header as `X-Tenant-Type`.
+   * @returns a **new client** with with given headers.
+   */
+  withTenant (tenantId: string, tenantType = 'organization') {
     return this.withHeaders({
-      'X-Tenant-Id': _tenantId,
-      'X-Tenant-Type': TenantType,
+      'X-Tenant-Id': tenantId,
+      'X-Tenant-Type': tenantType,
     })
   }
 
-  withOperator (_operatorId: string) {
+  /**
+   * Creates (by withHeaders) a **new client** instance with given `X-Operator-ID`.
+   * @param operatorId that will be added to header as `X-Operator-ID`.
+   * @returns a **new client** with with given headers.
+   */
+  withOperator (operatorId: string) {
     return this.withHeaders({
-      'X-Operator-ID': _operatorId,
+      'X-Operator-ID': operatorId,
     })
   }
 
+  /**
+   * Creates a JWT token string with given payload and client's appSecrets.
+   * @param payload Payload to sign, should be an literal object.
+   * @param options some JWT sign options.
+   * @returns a token string.
+   */
   signToken (payload: Payload, options?: jwt.SignOptions) {
     return jwt.sign(payload, this._options.appSecrets[0], options)
   }
 
+  /**
+   * Decode a JWT token string to literal object payload.
+   * @param token token to decode.
+   * @param options some JWT decode options.
+   * @returns a literal object.
+   */
   decodeToken (token: string, options?: jwt.DecodeOptions): Payload {
     return jwt.decode(token, options) as Payload
   }
 
+  /**
+   * Decode and verify a JWT token string to literal object payload.
+   * if verify failure, it will throw a 401 error (creates by 'http-errors' module)
+   * @param token token to decode.
+   * @param options some JWT verify options.
+   * @returns a literal object.
+   */
   verifyToken (token: string, options?: jwt.VerifyOptions): Payload {
     let error = null
     for (const secret of this._options.appSecrets) {
@@ -202,10 +284,19 @@ export class Client {
     throw createError(401, error)
   }
 
+  /**
+   * request with given method, url and data.
+   * It will genenrate a jwt token by signToken, and set to 'Authorization' header.
+   * It will merge headers, query and request options that preset into client.
+   * @param method method to request.
+   * @param url url to request, it will be resolved with client host.
+   * @param data data to request.
+   * @returns a promise with Response
+   */
   request (method: string, url: string, data?: any) {
     const iat = Math.floor(Date.now() / (1000 * 3600)) * 3600
     const exp = iat + 3660
-    // token change in every hour
+    // token change in every hour, optimizing for server cache.
     const token = this.signToken({ _appId: this._options.appId, iat, exp })
     const options: RequestOptions & request.UrlOptions = Object.assign({ url: '' }, this._requestOptions)
 
@@ -224,38 +315,67 @@ export class Client {
     return Client.request(options)
   }
 
+  /**
+   * request with `GET` method.
+   * @returns a promise with Response body
+   */
   get<T> (url: string, data?: any) {
     return this.request('GET', url, data).then(assertRes) as Promise<T>
   }
 
+  /**
+   * request with `POST` method.
+   * @returns a promise with Response body
+   */
   post<T> (url: string, data?: any) {
     return this.request('POST', url, data).then(assertRes) as Promise<T>
   }
 
+  /**
+   * request with `PUT` method.
+   * @returns a promise with Response body
+   */
   put<T> (url: string, data?: any) {
     return this.request('PUT', url, data).then(assertRes) as Promise<T>
   }
 
+  /**
+   * request with `PATCH` method.
+   * @returns a promise with Response body
+   */
   patch<T> (url: string, data?: any) {
     return this.request('PATCH', url, data).then(assertRes) as Promise<T>
   }
 
+  /**
+   * request with `DELETE` method.
+   * @returns a promise with Response body
+   */
   delete<T> (url: string, data?: any) {
     return this.request('DELETE', url, data).then(assertRes) as Promise<T>
   }
 }
 
+/**.
+ * @returns true if response' statusCode in [200, 300)
+ */
 export function isSuccess (res: request.RequestResponse) {
   return res.statusCode >= 200 && res.statusCode < 300
 }
 
+/**.
+ * @returns a promise that delay with given ms time.
+ */
 export function delay (ms: number) {
   return new Promise((resolve) => $setTimeout(resolve, ms))
 }
 
-export function assertRes (res: Response): any {
+/**.
+ * @returns a Response body or throw a error.
+ */
+export function assertRes<T> (res: Response): T {
   if (isSuccess(res)) {
-    return res.body
+    return res.body as T
   }
 
   // 追加额外的信息，方便调试
