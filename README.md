@@ -1,48 +1,46 @@
-# tws-auth
+# [tws-auth](https://github.com/teambition/tws-auth)
+Node.js SDK of TWS (Teambition Web Service) client.
 
-[![Build Status](https://travis-ci.org/teambition/tws-auth.svg?branch=master)](https://travis-ci.org/teambition/tws-auth)
-
-Node.js SDK of TWS (Teambition Web Service) authorization service. It is also a base TWS client module.
+[![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
+[![Downloads][downloads-image]][downloads-url]
 
 ## Installation
 
-```bash
-npm install tws-auth
+```
+npm i --save tws-auth
 ```
 
 ## Usage
 
 ```js
-const Auth = require('tws-auth')
+const { TWS } = require('tws-auth')
+
+const tws = new TWS({
+  appId: '78f95e92c06a546f7dab7327',
+  appSecrets: ['app_secret_new', 'app_secret_old'],
+  host: 'https://auth.teambitionapis.com'
+})
 
 ;(async function () {
-  const auth = new Auth({
-    host: 'https://auth.teambitionapis.com',
-    appId: '78f95e92c06a546f7dab7327',
-    appSecrets: ['app_secret_new', 'app_secret_old'],
-    cacheStore: new Auth.RedisStore({ addrs: ['127.0.0.1:6379'] }, 'TWS_AUTH')
-  })
-
-  console.log(await auth.authorize('59291f0178af6230601abecc', 'self'))
+  console.log(await tws.request('GET', '/version'))
+  console.log(await tws.get('/version'))
+  console.log(await tws.authSrv.getUserById('59291f0178af6230601abecc'))
 })()
 ```
 
-## API
-
-### Class Client
+## Documentation
 
 ```js
-const Client = require('tws-auth').Client
+const { Client } = require('tws-auth')
 ```
 
-#### new Client({ appId, appSecret[, host, timeout, cacheStore, rootCert, privateKey, certChain] })
+### new Client({ appId, appSecret[, host, timeout, cacheStore, rootCert, privateKey, certChain] })
 
 - appId `String` : The ID of your TWS application.
 - appSecrets: `[]String` : The secret passwords of your TWS application.
 - host `String` : Optional, host URL of TWS authorization service, by default is `'https://auth.teambitionapis.com'`.
 - timeout `Number` : Optional, requst timeout in milliseconds, by default is `3000`.
-- cacheStore `Object` : Optional, the cache store for TWS access token, if provided, it should be an instance of `require('tws-auth/cache/store')`.
-- cacheKeyWithType `Boolean` : Optional, whether to generate cache key with `grantorType` when `client.authorize` be called.
 - rootCert `Buffer` : Optional, the client root certificate.
 - privateKey `Buffer` : Optional, the client certificate private key.
 - certChain `Buffer` : Optional, the client certificate cert chain.
@@ -52,81 +50,18 @@ const Client = require('tws-auth').Client
 - maxAttempts `Number` : Optional, max attempts for a request, default to 3 times.
 - retryErrorCodes `[]String` : Optional, error codes that should retry, default to `['ECONNRESET', 'ENOTFOUND', 'ESOCKETTIMEDOUT', 'ETIMEDOUT', 'ECONNREFUSED', 'EHOSTUNREACH', 'EPIPE', 'EAI_AGAIN']`.
 
-#### Class Method: client.withService(servicePrototype[, servicehost])
-Creates a new service from service prototype base on the client. It will re-use auth service client!
+### More: https://teambition.github.io/tws-auth/
 
-```js
-const sdk = new Auth(options)
-const someOtherSdk = sdk.withService(someServicePrototype, 'https://some-tws-apis.com')
-```
+## License
+`tws-auth` is licensed under the [MIT](https://github.com/teambition/tws-auth/blob/master/LICENSE) license.
+Copyright &copy; 2017-2018 Teambition.
 
-#### Class Method: client.signToken(payload, options)
+[npm-url]: https://www.npmjs.com/package/tws-auth
+[npm-image]: https://img.shields.io/npm/v/tws-auth.svg
 
-#### Class Method: client.decodeToken(token, options)
+[travis-url]: https://travis-ci.org/teambition/tws-auth
+[travis-image]: http://img.shields.io/travis/teambition/tws-auth.svg
 
-#### Class Method: client.verifyToken(token, options)
+[downloads-url]: https://npmjs.org/package/tws-auth
+[downloads-image]: https://img.shields.io/npm/dm/tws-auth.svg?style=flat-square
 
-#### Class Method: client.requestWithToken(method, url, data, tokens, assertFunc = assertRes)
-
-#### Class Method: client.requestWithToken(options)
-
-#### Class Method: client.requestWithSelfToken(method, url, data, assertFunc = assertRes)
-
-#### Class Method: client.requestWithSelfToken(options)
-
-#### Class Method: client.authorize(_grantorId, grantorType)
-
-### Class Auth
-
-```js
-const Auth = require('tws-auth')
-// Extends Client: class Auth extends Client {}
-```
-
-#### Class Methods: Same as Client Class
-
-#### Auth.user
-
-User service prototype.
-
-#### Auth.Client
-
-Client class.
-
-#### Auth.Store
-
-Store class.
-
-#### Auth.RedisStore
-
-#### new Auth.RedisStore(options, prefix)
-
-RedisStore class.
-
-```js
-const cacheStore = new Auth.RedisStore({addrs: ['127.0.0.1:6379']}, 'TWS_AUTH')
-```
-
-#### Auth.MemoryStore
-
-MemoryStore class.
-
-#### Auth.assertRes
-
-assertRes function.
-
-### User service methods
-
-#### [deprecated] auth.user.verifyCookie(cookie, signature)
-
-#### [deprecated] auth.user.verifyToken(accessToken)
-
-#### auth.user.checkCookie(cookie, signature)
-
-#### auth.user.checkToken(accessToken)
-
-#### auth.user.getById(_userId)
-
-#### auth.user.getByEmail(email)
-
-#### auth.user.batchGetbyIds(_ids)
