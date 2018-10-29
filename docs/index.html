@@ -83,6 +83,10 @@
   <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> tws.request(<span class="hljs-string">'GET'</span>, <span class="hljs-string">'/version'</span>))
   <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> tws.get(<span class="hljs-string">'/version'</span>))
   <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> tws.authSrv.getUserById(<span class="hljs-string">'59291f0178af6230601abecc'</span>))
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> tws
+    .withTenant(<span class="hljs-string">'56f0d51e3cd13a5b537c3a12'</span>, <span class="hljs-string">'organization'</span>)
+    .get(<span class="hljs-string">'/v1/projects/5ae144a3b292d60011b8c329'</span>)
+  )
 })()</code></pre>
 				<h2 id="documentation">Documentation</h2>
 				<pre><code class="language-js"><span class="hljs-keyword">const</span> { Client } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'tws-auth'</span>)</code></pre>
@@ -101,6 +105,146 @@
 					<li>maxAttempts <code>Number</code> : Optional, max attempts for a request, default to 3 times.</li>
 					<li>retryErrorCodes <code>[]String</code> : Optional, error codes that should retry, default to <code>[&#39;ECONNRESET&#39;, &#39;ENOTFOUND&#39;, &#39;ESOCKETTIMEDOUT&#39;, &#39;ETIMEDOUT&#39;, &#39;ECONNREFUSED&#39;, &#39;EHOSTUNREACH&#39;, &#39;EPIPE&#39;, &#39;EAI_AGAIN&#39;]</code>.</li>
 				</ul>
+				<h3 id="client-api">Client API</h3>
+				<pre><code class="language-ts"><span class="hljs-keyword">class</span> Client {
+    <span class="hljs-comment">/**
+     * a retryable request, wrap of https://github.com/request/request.
+     * When the connection fails with one of ECONNRESET, ENOTFOUND, ESOCKETTIMEDOUT, ETIMEDOUT,
+     * ECONNREFUSED, EHOSTUNREACH, EPIPE, EAI_AGAIN, the request will automatically be re-attempted as
+     * these are often recoverable errors and will go away on retry.
+     * @param options request options.
+     * @returns a promise with Response.
+     */</span>
+    <span class="hljs-keyword">static</span> request(options: RequestOptions &amp; request.UrlOptions): <span class="hljs-built_in">Promise</span>&lt;Response&gt;;
+    <span class="hljs-keyword">constructor</span>(<span class="hljs-params">options: ClientOptions</span>);
+    /**
+     * @returns User-Agent on the client.
+     */
+    /**
+    * Set User-Agent to the client.
+    * @param ua User-Agent string.
+    */
+    UA: string;
+    /**
+     * @returns host on the client.
+     */
+    readonly host: string;
+    /**
+     * @returns preset headers on the client.
+     */
+    readonly headers: Payload;
+    /**
+     * @returns preset query on the client.
+     */
+    readonly query: Payload;
+    /**
+     * @returns preset request options on the client.
+     */
+    readonly requestOptions: RequestOptions;
+    /**
+     * Creates (<span class="hljs-params">by <span class="hljs-built_in">Object</span>.create</span>) a **new client** instance with given service methods.
+     * @param servicePrototype service methods that will be mount to client.
+     * @param servicehost service host for new client.
+     * @returns a **new client** with with given service methods.
+     */
+    withService&lt;T&gt;(<span class="hljs-params">serviceMethod: T, servicehost?: <span class="hljs-built_in">string</span></span>): this &amp; T;
+    /**
+     * Creates (<span class="hljs-params">by <span class="hljs-built_in">Object</span>.create</span>) a **new client** instance with given request options.
+     * @param options request options that will be copy into client.
+     * @returns a **new client** with with given request options.
+     */
+    withOptions(<span class="hljs-params">options: RequestOptions</span>): this;
+    /**
+     * Creates (<span class="hljs-params">by <span class="hljs-built_in">Object</span>.create</span>) a **new client** instance with given headers.
+     * @param headers headers that will be copy into client.
+     * @returns a **new client** with with given headers.
+     */
+    withHeaders(<span class="hljs-params">headers: Payload</span>): this;
+    /**
+     * Creates (<span class="hljs-params">by <span class="hljs-built_in">Object</span>.create</span>) a **new client** instance with given query.
+     * @param query query that will be copy into client.
+     * @returns a **new client** with with given query.
+     */
+    withQuery(<span class="hljs-params">query: Payload</span>): this;
+    /**
+     * Creates (<span class="hljs-params">by withHeaders</span>) a **new client** instance with given `X-Tenant-Id` and `X-Tenant-Type`.
+     * @param tenantId that will be added to header as `X-Tenant-Id`.
+     * @param tenantType that will be added to header as `X-Tenant-Type`.
+     * @returns a **new client** with with given headers.
+     */
+    withTenant(<span class="hljs-params">tenantId: <span class="hljs-built_in">string</span>, tenantType?: <span class="hljs-built_in">string</span></span>): this;
+    /**
+     * Creates (<span class="hljs-params">by withHeaders</span>) a **new client** instance with given `X-Operator-ID`.
+     * @param operatorId that will be added to header as `X-Operator-ID`.
+     * @returns a **new client** with with given headers.
+     */
+    withOperator(<span class="hljs-params">operatorId: <span class="hljs-built_in">string</span></span>): this;
+    /**
+     * Creates a JWT token string with given payload and client's appSecrets.
+     * @param payload Payload to sign, should be an literal object.
+     * @param options some JWT sign options.
+     * @returns a token string.
+     */
+    signToken(<span class="hljs-params">payload: Payload, options?: jwt.SignOptions</span>): string;
+    /**
+     * Creates a periodical changed JWT token string with appId and appSecrets.
+     * @param payload Payload to sign, should be an literal object.
+     * @param periodical period in seccond, default to 3600s.
+     * @param options some JWT sign options.
+     * @returns a token string.
+     */
+    signAppToken(<span class="hljs-params">periodical?: <span class="hljs-built_in">number</span>, options?: jwt.SignOptions</span>): string;
+    /**
+     * Decode a JWT token string to literal object payload.
+     * @param token token to decode.
+     * @param options some JWT decode options.
+     * @returns a literal object.
+     */
+    decodeToken(<span class="hljs-params">token: <span class="hljs-built_in">string</span>, options?: jwt.DecodeOptions</span>): Payload;
+    /**
+     * Decode and verify a JWT token string to literal object payload.
+     * if verify failure, it will throw a 401 error (<span class="hljs-params">creates by 'http-errors' <span class="hljs-built_in">module</span></span>)
+     * @param token token to decode.
+     * @param options some JWT verify options.
+     * @returns a literal object.
+     */
+    verifyToken(<span class="hljs-params">token: <span class="hljs-built_in">string</span>, options?: jwt.VerifyOptions</span>): Payload;
+    /**
+     * request with given method, url and data.
+     * It will genenrate a jwt token by signToken, and set to 'Authorization' header.
+     * It will merge headers, query and request options that preset into client.
+     * @param method method to request.
+     * @param url url to request, it will be resolved with client host.
+     * @param data data to request.
+     * @returns a promise with Response
+     */
+    request(<span class="hljs-params">method: <span class="hljs-built_in">string</span>, url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;Response&gt;;
+    /**
+     * request with `GET` method.
+     * @returns a promise with Response body
+     */
+    get&lt;T&gt;(<span class="hljs-params">url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;T&gt;;
+    /**
+     * request with `POST` method.
+     * @returns a promise with Response body
+     */
+    post&lt;T&gt;(<span class="hljs-params">url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;T&gt;;
+    /**
+     * request with `PUT` method.
+     * @returns a promise with Response body
+     */
+    put&lt;T&gt;(<span class="hljs-params">url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;T&gt;;
+    /**
+     * request with `PATCH` method.
+     * @returns a promise with Response body
+     */
+    patch&lt;T&gt;(<span class="hljs-params">url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;T&gt;;
+    /**
+     * request with `DELETE` method.
+     * @returns a promise with Response body
+     */
+    delete&lt;T&gt;(<span class="hljs-params">url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;T&gt;;
+}</code></pre>
 				<h3 id="more-https-teambition-github-io-tws-auth-">More: <a href="https://teambition.github.io/tws-auth/">https://teambition.github.io/tws-auth/</a></h3>
 				<h2 id="license">License</h2>
 				<p><code>tws-auth</code> is licensed under the <a href="https://github.com/teambition/tws-auth/blob/master/LICENSE">MIT</a> license.

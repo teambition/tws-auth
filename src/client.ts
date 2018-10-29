@@ -111,7 +111,7 @@ export class Client {
   private _headers: Payload
   private _query: Payload
   private _requestOptions: RequestOptions
-  constructor (options: ClientOptions) {
+  constructor (options: ClientOptions & RetryOptions) {
     if (!MONGO_REG.test(options.appId)) {
       throw new Error(`appId: ${options.appId} is not a valid mongo object id`)
     }
@@ -127,7 +127,9 @@ export class Client {
     options.timeout = options.timeout == null ? 3000 : options.timeout
     options.pool = options.pool == null ?
       { maxSockets: options.maxSockets == null ? 100 : options.maxSockets } : options.pool
-    options.strictSSL = options.strictSSL || false
+    options.strictSSL = options.strictSSL === true
+    options.retryDelay = options.retryDelay == null ? 2000 : options.retryDelay
+    options.maxAttempts = options.maxAttempts == null ? 3 : options.maxAttempts
 
     this._options = options
     this._host = options.host
@@ -143,7 +145,26 @@ export class Client {
       ca: options.rootCert,
       pool: options.pool,
       time: options.time,
+      retryDelay: options.retryDelay,
+      maxAttempts: options.maxAttempts,
+      retryErrorCodes: options.retryErrorCodes,
     } as RequestOptions
+  }
+
+  /**
+   * @returns User-Agent on the client.
+   */
+  get UA (): string {
+    const ua = this._headers['User-Agent']
+    return ua == null ? '' : ua
+  }
+
+  /**
+   * Set User-Agent to the client.
+   * @param ua User-Agent string.
+   */
+  set UA (ua: string) {
+    this._headers['User-Agent'] = ua
   }
 
   /**
@@ -256,6 +277,24 @@ export class Client {
   }
 
   /**
+   * Creates a periodical changed JWT token string with appId and appSecrets.
+   * @param payload Payload to sign, should be an literal object.
+   * @param periodical period in seccond, default to 3600s.
+   * @param options some JWT sign options.
+   * @returns a token string.
+   */
+  signAppToken (periodical: number = 3600, options?: jwt.SignOptions) {
+    const iat = Math.floor(Date.now() / (1000 * periodical)) * periodical
+    const payload = {
+      iat,
+      exp: iat + Math.floor(1.1 * periodical),
+      _appId: this._options.appId,
+    }
+    // token change in every hour, optimizing for server cache.
+    return this.signToken(payload, options)
+  }
+
+  /**
    * Decode a JWT token string to literal object payload.
    * @param token token to decode.
    * @param options some JWT decode options.
@@ -294,10 +333,8 @@ export class Client {
    * @returns a promise with Response
    */
   request (method: string, url: string, data?: any) {
-    const iat = Math.floor(Date.now() / (1000 * 3600)) * 3600
-    const exp = iat + 3660
     // token change in every hour, optimizing for server cache.
-    const token = this.signToken({ _appId: this._options.appId, iat, exp })
+    const token = this.signAppToken()
     const options: RequestOptions & request.UrlOptions = Object.assign({ url: '' }, this._requestOptions)
 
     options.method = method.toUpperCase()
