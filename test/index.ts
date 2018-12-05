@@ -5,8 +5,7 @@ import { AddressInfo } from 'net'
 import assert from 'assert'
 import querystring from 'querystring'
 import { suite, it, Suite, before, after } from 'tman'
-import { TWS } from '../src'
-import { Client, Payload, isSuccess, delay } from '../src'
+import { TWS, Client, Payload, isSuccess, delay } from '../src'
 
 suite('tws-auth', function (this: Suite) {
   this.timeout(10000)

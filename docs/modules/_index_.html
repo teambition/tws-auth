@@ -76,7 +76,255 @@
 								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_index_.tws.html" class="tsd-kind-icon">TWS</a></li>
 							</ul>
 						</section>
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Object literals</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-object-literal tsd-parent-kind-external-module tsd-is-not-exported"><a href="_index_.html#authsrv" class="tsd-kind-icon">auth<wbr>Srv</a></li>
+							</ul>
+						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+				<h2>Object literals</h2>
+				<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="authsrv" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> auth<wbr>Srv</h3>
+					<div class="tsd-signature tsd-kind-icon">auth<wbr>Srv<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/teambition/tws-auth/blob/bb973fa/src/index.ts#L8">index.ts:8</a></li>
+						</ul>
+					</aside>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-has-type-parameter tsd-is-not-exported">
+						<a name="authsrv.checkusercookie" class="tsd-anchor"></a>
+						<h3>check<wbr>User<wbr>Cookie</h3>
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-has-type-parameter tsd-is-not-exported">
+							<li class="tsd-signature tsd-kind-icon">check<wbr>User<wbr>Cookie&lt;T&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../classes/_client_.client.html" class="tsd-signature-type">Client</a>, cookie<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, signature<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><a href="_client_.html#requestoptions" class="tsd-signature-type">RequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						</ul>
+						<ul class="tsd-descriptions">
+							<li class="tsd-description">
+								<aside class="tsd-sources">
+									<ul>
+										<li>Defined in <a href="https://github.com/teambition/tws-auth/blob/bb973fa/src/index.ts#L17">index.ts:17</a></li>
+									</ul>
+								</aside>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Checks user&#39; session cookie.</p>
+									</div>
+								</div>
+								<h4 class="tsd-type-parameters-title">Type parameters</h4>
+								<ul class="tsd-type-parameters">
+									<li>
+										<h4>T</h4>
+									</li>
+								</ul>
+								<h4 class="tsd-parameters-title">Parameters</h4>
+								<ul class="tsd-parameters">
+									<li>
+										<h5>this: <a href="../classes/_client_.client.html" class="tsd-signature-type">Client</a></h5>
+									</li>
+									<li>
+										<h5>cookie: <span class="tsd-signature-type">string</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>seesion cookie to check.</p>
+										</div>
+									</li>
+									<li>
+										<h5>signature: <span class="tsd-signature-type">string</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>cookie&#39; signature to check.</p>
+										</div>
+									</li>
+									<li>
+										<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="_client_.html#requestoptions" class="tsd-signature-type">RequestOptions</a></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>request options.</p>
+										</div>
+									</li>
+								</ul>
+								<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								<p>a result with user info or a error that cookie is invalid.</p>
+							</li>
+						</ul>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-has-type-parameter tsd-is-not-exported">
+						<a name="authsrv.checkusertoken" class="tsd-anchor"></a>
+						<h3>check<wbr>User<wbr>Token</h3>
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-has-type-parameter tsd-is-not-exported">
+							<li class="tsd-signature tsd-kind-icon">check<wbr>User<wbr>Token&lt;T&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../classes/_client_.client.html" class="tsd-signature-type">Client</a>, accessToken<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><a href="_client_.html#requestoptions" class="tsd-signature-type">RequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						</ul>
+						<ul class="tsd-descriptions">
+							<li class="tsd-description">
+								<aside class="tsd-sources">
+									<ul>
+										<li>Defined in <a href="https://github.com/teambition/tws-auth/blob/bb973fa/src/index.ts#L34">index.ts:34</a></li>
+									</ul>
+								</aside>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Checks user&#39; access token.</p>
+									</div>
+								</div>
+								<h4 class="tsd-type-parameters-title">Type parameters</h4>
+								<ul class="tsd-type-parameters">
+									<li>
+										<h4>T</h4>
+									</li>
+								</ul>
+								<h4 class="tsd-parameters-title">Parameters</h4>
+								<ul class="tsd-parameters">
+									<li>
+										<h5>this: <a href="../classes/_client_.client.html" class="tsd-signature-type">Client</a></h5>
+									</li>
+									<li>
+										<h5>accessToken: <span class="tsd-signature-type">string</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>access token to check.</p>
+										</div>
+									</li>
+									<li>
+										<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="_client_.html#requestoptions" class="tsd-signature-type">RequestOptions</a></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>request options.</p>
+										</div>
+									</li>
+								</ul>
+								<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								<p>a result with user info or a error that access token is invalid.</p>
+							</li>
+						</ul>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-has-type-parameter tsd-is-not-exported">
+						<a name="authsrv.getuserbyemail" class="tsd-anchor"></a>
+						<h3>get<wbr>User<wbr>ByEmail</h3>
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-has-type-parameter tsd-is-not-exported">
+							<li class="tsd-signature tsd-kind-icon">get<wbr>User<wbr>ByEmail&lt;T&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../classes/_client_.client.html" class="tsd-signature-type">Client</a>, email<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						</ul>
+						<ul class="tsd-descriptions">
+							<li class="tsd-description">
+								<aside class="tsd-sources">
+									<ul>
+										<li>Defined in <a href="https://github.com/teambition/tws-auth/blob/bb973fa/src/index.ts#L62">index.ts:62</a></li>
+									</ul>
+								</aside>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Get a user by it&#39;s email.</p>
+									</div>
+								</div>
+								<h4 class="tsd-type-parameters-title">Type parameters</h4>
+								<ul class="tsd-type-parameters">
+									<li>
+										<h4>T</h4>
+									</li>
+								</ul>
+								<h4 class="tsd-parameters-title">Parameters</h4>
+								<ul class="tsd-parameters">
+									<li>
+										<h5>this: <a href="../classes/_client_.client.html" class="tsd-signature-type">Client</a></h5>
+									</li>
+									<li>
+										<h5>email: <span class="tsd-signature-type">string</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>user&#39;s email.</p>
+										</div>
+									</li>
+								</ul>
+								<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								<p>a user info.</p>
+							</li>
+						</ul>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-has-type-parameter tsd-is-not-exported">
+						<a name="authsrv.getuserbyid" class="tsd-anchor"></a>
+						<h3>get<wbr>User<wbr>ById</h3>
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-has-type-parameter tsd-is-not-exported">
+							<li class="tsd-signature tsd-kind-icon">get<wbr>User<wbr>ById&lt;T&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../classes/_client_.client.html" class="tsd-signature-type">Client</a>, _userId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						</ul>
+						<ul class="tsd-descriptions">
+							<li class="tsd-description">
+								<aside class="tsd-sources">
+									<ul>
+										<li>Defined in <a href="https://github.com/teambition/tws-auth/blob/bb973fa/src/index.ts#L50">index.ts:50</a></li>
+									</ul>
+								</aside>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Get a user by it&#39;s id.</p>
+									</div>
+								</div>
+								<h4 class="tsd-type-parameters-title">Type parameters</h4>
+								<ul class="tsd-type-parameters">
+									<li>
+										<h4>T</h4>
+									</li>
+								</ul>
+								<h4 class="tsd-parameters-title">Parameters</h4>
+								<ul class="tsd-parameters">
+									<li>
+										<h5>this: <a href="../classes/_client_.client.html" class="tsd-signature-type">Client</a></h5>
+									</li>
+									<li>
+										<h5>_userId: <span class="tsd-signature-type">string</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>user&#39;s id.</p>
+										</div>
+									</li>
+								</ul>
+								<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								<p>a user info.</p>
+							</li>
+						</ul>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-has-type-parameter tsd-is-not-exported">
+						<a name="authsrv.getusersbyids" class="tsd-anchor"></a>
+						<h3>get<wbr>Usersby<wbr>Ids</h3>
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-has-type-parameter tsd-is-not-exported">
+							<li class="tsd-signature tsd-kind-icon">get<wbr>Usersby<wbr>Ids&lt;T&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../classes/_client_.client.html" class="tsd-signature-type">Client</a>, ids<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, queries<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						</ul>
+						<ul class="tsd-descriptions">
+							<li class="tsd-description">
+								<aside class="tsd-sources">
+									<ul>
+										<li>Defined in <a href="https://github.com/teambition/tws-auth/blob/bb973fa/src/index.ts#L75">index.ts:75</a></li>
+									</ul>
+								</aside>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Get many users by their id.</p>
+									</div>
+								</div>
+								<h4 class="tsd-type-parameters-title">Type parameters</h4>
+								<ul class="tsd-type-parameters">
+									<li>
+										<h4>T</h4>
+									</li>
+								</ul>
+								<h4 class="tsd-parameters-title">Parameters</h4>
+								<ul class="tsd-parameters">
+									<li>
+										<h5>this: <a href="../classes/_client_.client.html" class="tsd-signature-type">Client</a></h5>
+									</li>
+									<li>
+										<h5>ids: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>a array of users&#39;s id.</p>
+										</div>
+									</li>
+									<li>
+										<h5><span class="tsd-flag ts-flagDefault value">Default value</span> queries: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;{ fields: &#x27;_id,name,avatarUrl&#x27; }</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>a query of fieldmask.</p>
+										</div>
+									</li>
+								</ul>
+								<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								<p>a array of users info.</p>
+							</li>
+						</ul>
+					</section>
 				</section>
 			</section>
 		</div>
@@ -93,9 +341,6 @@
 						<a href="_index_.html">"index"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_service_auth_.html">"service/auth"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="_ua_.html">"ua"</a>
 					</li>
 				</ul>
@@ -104,6 +349,9 @@
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="../classes/_index_.tws.html" class="tsd-kind-icon">TWS</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_index_.html#authsrv" class="tsd-kind-icon">auth<wbr>Srv</a>
 					</li>
 				</ul>
 			</nav>
