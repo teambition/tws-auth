@@ -8,9 +8,9 @@ import { UA } from './ua'
 
 const $setTimeout = setTimeout
 const MONGO_REG = /^[0-9a-f]{24}$/i
-// Network Errors
-const RETRIABLE_ERRORS = ['ECONNRESET', 'ENOTFOUND',
-  'ESOCKETTIMEDOUT', 'ETIMEDOUT', 'ECONNREFUSED', 'EHOSTUNREACH', 'EPIPE', 'EAI_AGAIN']
+// Network Errors, exclude 'ETIMEDOUT' and 'ESOCKETTIMEDOUT'
+// https://github.com/teambition/tws-auth/issues/15
+const RETRIABLE_ERRORS = ['ECONNRESET', 'ENOTFOUND', 'ECONNREFUSED', 'EHOSTUNREACH', 'EPIPE', 'EAI_AGAIN']
 
 /**
  * Options for request retrying.
