@@ -1,4 +1,5 @@
 # [tws-auth](https://github.com/teambition/tws-auth)
+
 Node.js SDK of TWS (Teambition Web Service) client.
 
 [![NPM version][npm-image]][npm-url]
@@ -200,8 +201,9 @@ class Client {
 ### More: https://teambition.github.io/tws-auth/
 
 ## License
+
 `tws-auth` is licensed under the [MIT](https://github.com/teambition/tws-auth/blob/master/LICENSE) license.
-Copyright &copy; 2017-2018 Teambition.
+Copyright &copy; 2017-2019 Teambition.
 
 [npm-url]: https://www.npmjs.com/package/tws-auth
 [npm-image]: https://img.shields.io/npm/v/tws-auth.svg
@@ -211,4 +213,3 @@ Copyright &copy; 2017-2018 Teambition.
 
 [downloads-url]: https://npmjs.org/package/tws-auth
 [downloads-image]: https://img.shields.io/npm/dm/tws-auth.svg?style=flat-square
-

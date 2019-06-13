@@ -3,7 +3,6 @@
 import request from 'request'
 import jwt from 'jsonwebtoken'
 import createError from 'http-errors'
-import { resolve as urlResolve } from 'url'
 import { UA } from './ua'
 
 const $setTimeout = setTimeout
@@ -338,7 +337,7 @@ export class Client {
     const options: RequestOptions & request.UrlOptions = Object.assign({ url: '' }, this._requestOptions)
 
     options.method = method.toUpperCase()
-    options.url = urlResolve(this._host, url)
+    options.url = urlJoin(this._host, url)
     options.qs = Object.assign({}, options.qs, this._query)
     options.headers =
       Object.assign({}, options.headers, this._headers, { Authorization: `Bearer ${token}` })
@@ -437,4 +436,18 @@ export function assertRes<T> (res: Response): T {
   }
 
   throw err
+}
+
+// 简单的 url join，未考虑异常输入，这里不能使用 url.resolve，会丢失 path
+export function urlJoin (base: string = '', to: string = ''): string {
+  if (base !== '' && to !== '') {
+    if (base.endsWith('/')) {
+      base = base.slice(0, -1)
+    }
+    if (!to.startsWith('/')) {
+      to = '/' + to
+    }
+  }
+
+  return base + to
 }

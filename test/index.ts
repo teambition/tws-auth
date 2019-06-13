@@ -6,6 +6,7 @@ import assert from 'assert'
 import querystring from 'querystring'
 import { suite, it, Suite, before, after } from 'tman'
 import { TWS, Client, Payload, isSuccess, delay } from '../src'
+import { urlJoin } from '../src/client'
 
 suite('tws-auth', function (this: Suite) {
   this.timeout(10000)
@@ -269,7 +270,7 @@ suite('tws-auth', function (this: Suite) {
       cli = new Client({
         appId: '59294da476d70b4b83fa91a5',
         appSecrets: ['123'],
-        host: `http://${addr.address}:${addr.port}`,
+        host: `http://127.0.0.1:${addr.port}`,
       })
     })
 
@@ -470,6 +471,23 @@ suite('tws-auth', function (this: Suite) {
       }
 
       throw new Error('not throw')
+    })
+  })
+
+  suite('urlJoin', function () {
+    it('should work', function () {
+      assert.strictEqual(urlJoin('http://abc.com', ''), 'http://abc.com')
+      assert.strictEqual(urlJoin('', 'http://abc.com'), 'http://abc.com')
+
+      assert.strictEqual(urlJoin('http://abc.com', 'api/users'), 'http://abc.com/api/users')
+      assert.strictEqual(urlJoin('http://abc.com', '/api/users'), 'http://abc.com/api/users')
+      assert.strictEqual(urlJoin('http://abc.com/', '/api/users'), 'http://abc.com/api/users')
+      assert.strictEqual(urlJoin('http://abc.com/', 'api/users'), 'http://abc.com/api/users')
+
+      assert.strictEqual(urlJoin('http://abc.com/tbs/user', 'api/users'), 'http://abc.com/tbs/user/api/users')
+      assert.strictEqual(urlJoin('http://abc.com/tbs/user', '/api/users'), 'http://abc.com/tbs/user/api/users')
+      assert.strictEqual(urlJoin('http://abc.com/tbs/user/', '/api/users'), 'http://abc.com/tbs/user/api/users')
+      assert.strictEqual(urlJoin('http://abc.com/tbs/user/', 'api/users'), 'http://abc.com/tbs/user/api/users')
     })
   })
 })
