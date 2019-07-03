@@ -68,6 +68,9 @@ export class Client {
     const maxAttempts = options.maxAttempts != null ? Math.floor(options.maxAttempts) : 3
     const retryErrorCodes = Array.isArray(options.retryErrorCodes) ? options.retryErrorCodes : RETRIABLE_ERRORS
 
+    // default to `false`
+    options.followRedirect = options.followRedirect === true
+
     let err = null
     let attempts = 0
     while (attempts < maxAttempts) {
@@ -410,7 +413,7 @@ export function delay (ms: number) {
  * @returns a Response body or throw a error.
  */
 export function assertRes<T> (res: Response): T {
-  if (isSuccess(res)) {
+  if (isSuccess(res) && typeof res.body === 'object') {
     return res.body as T
   }
 
@@ -428,7 +431,9 @@ export function assertRes<T> (res: Response): T {
   // 标准的 Teambition Web Service 错误响应应该包含 `error` 和 `message` 两个 string 属性
   // 其中 error 为错误码，形如 "InvalidPassword", "UserNotFound"，客户端可以根据该错误码进行 i18n 错误提示处理
   // message 则为英文版的详细错误提示
-  if (res.body != null) {
+  if (typeof res.body === 'string') {
+    err.message = res.body
+  } else if (res.body != null) {
     err.name = err.error = res.body.error == null ? err.name : res.body.error
     if (res.body.message != null) {
       err.message = res.body.message
