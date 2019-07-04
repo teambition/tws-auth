@@ -351,7 +351,12 @@ export class Client {
         options.body = data
       }
     }
-    return Client.request(options)
+    return Client.request(options).then((resp) => {
+      if (resp.statusCode === 200 && Number(resp.headers['x-http-status']) > 0) {
+        resp.statusCode = Number(resp.headers['x-http-status'])
+      }
+      return resp
+    })
   }
 
   /**
