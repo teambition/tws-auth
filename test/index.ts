@@ -394,6 +394,39 @@ suite('tws-auth', function (this: Suite) {
     })
   })
 
+  suite('client.request with x-http-status', function () {
+    let server: http.Server
+    let cli: Client
+
+    before(function () {
+      server = http.createServer((_, res) => {
+        res.statusCode = 200
+        res.setHeader('Content-Type', 'application/json; charset=utf-8')
+        res.setHeader('x-http-status', '400')
+        res.end(JSON.stringify({
+          error: 'Bad Param Request',
+        }))
+      })
+      server.listen()
+      const addr = server.address() as AddressInfo
+
+      cli = new Client({
+        appId: '59294da476d70b4b83fa91a5',
+        appSecrets: ['123'],
+        host: `http://127.0.0.1:${addr.port}`,
+      })
+    })
+
+    after(function () {
+      server.close()
+    })
+
+    it('request should ok', async function () {
+      const res = await cli.request('GET', '/abc')
+      assert.equal(res.statusCode, 400)
+    })
+  })
+
   suite('auth service', function () {
     let cli: TWS
 
