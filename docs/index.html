@@ -64,13 +64,20 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<h1 id="tws-auth"><a href="https://github.com/teambition/tws-auth">tws-auth</a></h1>
+				<a href="#a-hrefhttpsgithubcomteambitiontws-authtws-autha" id="a-hrefhttpsgithubcomteambitiontws-authtws-autha" style="color: inherit; text-decoration: none;">
+					<h1><a href="https://github.com/teambition/tws-auth">tws-auth</a></h1>
+				</a>
 				<p>Node.js SDK of TWS (Teambition Web Service) client.</p>
 				<p><a href="https://www.npmjs.com/package/tws-auth"><img src="https://img.shields.io/npm/v/tws-auth.svg" alt="NPM version"></a>
 					<a href="https://travis-ci.org/teambition/tws-auth"><img src="http://img.shields.io/travis/teambition/tws-auth.svg" alt="Build Status"></a>
 				<a href="https://npmjs.org/package/tws-auth"><img src="https://img.shields.io/npm/dm/tws-auth.svg?style=flat-square" alt="Downloads"></a></p>
-				<h2 id="installation">Installation</h2>
-				<pre><code>npm <span class="hljs-selector-tag">i</span> --save tws-auth</code></pre><h2 id="usage">Usage</h2>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<pre><code>npm <span class="hljs-selector-tag">i</span> --save tws-auth</code></pre>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
 				<pre><code class="language-js"><span class="hljs-keyword">const</span> { TWS } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'tws-auth'</span>)
 
 <span class="hljs-keyword">const</span> tws = <span class="hljs-keyword">new</span> TWS({
@@ -88,9 +95,13 @@
     .get(<span class="hljs-string">'/v1/projects/5ae144a3b292d60011b8c329'</span>)
   )
 })()</code></pre>
-				<h2 id="documentation">Documentation</h2>
+				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+					<h2>Documentation</h2>
+				</a>
 				<pre><code class="language-js"><span class="hljs-keyword">const</span> { Client } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'tws-auth'</span>)</code></pre>
-				<h3 id="new-client-appid-appsecret-host-timeout-cachestore-rootcert-privatekey-certchain-">new Client({ appId, appSecret[, host, timeout, cacheStore, rootCert, privateKey, certChain] })</h3>
+				<a href="#new-client-appid-appsecret-host-timeout-cachestore-rootcert-privatekey-certchain-" id="new-client-appid-appsecret-host-timeout-cachestore-rootcert-privatekey-certchain-" style="color: inherit; text-decoration: none;">
+					<h3>new Client({ appId, appSecret[, host, timeout, cacheStore, rootCert, privateKey, certChain] })</h3>
+				</a>
 				<ul>
 					<li>appId <code>String</code> : The ID of your TWS application.</li>
 					<li>appSecrets: <code>[]String</code> : The secret passwords of your TWS application.</li>
@@ -105,7 +116,9 @@
 					<li>maxAttempts <code>Number</code> : Optional, max attempts for a request, default to 3 times.</li>
 					<li>retryErrorCodes <code>[]String</code> : Optional, error codes that should retry, default to <code>[&#39;ECONNRESET&#39;, &#39;ENOTFOUND&#39;, &#39;ESOCKETTIMEDOUT&#39;, &#39;ETIMEDOUT&#39;, &#39;ECONNREFUSED&#39;, &#39;EHOSTUNREACH&#39;, &#39;EPIPE&#39;, &#39;EAI_AGAIN&#39;]</code>.</li>
 				</ul>
-				<h3 id="client-api">Client API</h3>
+				<a href="#client-api" id="client-api" style="color: inherit; text-decoration: none;">
+					<h3>Client API</h3>
+				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">class</span> Client {
     <span class="hljs-comment">/**
      * a retryable request, wrap of https://github.com/request/request.
@@ -245,8 +258,12 @@
      */
     delete&lt;T&gt;(<span class="hljs-params">url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;T&gt;;
 }</code></pre>
-				<h3 id="more-https-teambition-github-io-tws-auth-">More: <a href="https://teambition.github.io/tws-auth/">https://teambition.github.io/tws-auth/</a></h3>
-				<h2 id="license">License</h2>
+				<a href="#more-a-hrefhttpsteambitiongithubiotws-authhttpsteambitiongithubiotws-autha" id="more-a-hrefhttpsteambitiongithubiotws-authhttpsteambitiongithubiotws-autha" style="color: inherit; text-decoration: none;">
+					<h3>More: <a href="https://teambition.github.io/tws-auth/">https://teambition.github.io/tws-auth/</a></h3>
+				</a>
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h2>License</h2>
+				</a>
 				<p><code>tws-auth</code> is licensed under the <a href="https://github.com/teambition/tws-auth/blob/master/LICENSE">MIT</a> license.
 				Copyright &copy; 2017-2019 Teambition.</p>
 			</div>
@@ -287,6 +304,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -335,7 +353,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
