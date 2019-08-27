@@ -418,7 +418,7 @@ export function delay (ms: number) {
  * @returns a Response body or throw a error.
  */
 export function assertRes<T> (res: Response): T {
-  if (isSuccess(res) && typeof res.body === 'object') {
+  if (isSuccess(res) && typeof res.body !== 'string') {
     return res.body as T
   }
 
