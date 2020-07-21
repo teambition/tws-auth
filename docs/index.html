@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>tws-auth</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for tws-auth">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -13,7 +13,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -56,7 +56,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1> tws-auth</h1>
+			<h1>tws-auth</h1>
 		</div>
 	</div>
 </header>
@@ -64,7 +64,7 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<a href="#a-hrefhttpsgithubcomteambitiontws-authtws-autha" id="a-hrefhttpsgithubcomteambitiontws-authtws-autha" style="color: inherit; text-decoration: none;">
+				<a href="#tws-auth" id="tws-auth" style="color: inherit; text-decoration: none;">
 					<h1><a href="https://github.com/teambition/tws-auth">tws-auth</a></h1>
 				</a>
 				<p>Node.js SDK of TWS (Teambition Web Service) client.</p>
@@ -74,31 +74,31 @@
 				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
 					<h2>Installation</h2>
 				</a>
-				<pre><code>npm <span class="hljs-selector-tag">i</span> --save tws-auth</code></pre>
+				<pre><code>npm i <span class="hljs-comment">--save tws-auth</span></code></pre>
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
 					<h2>Usage</h2>
 				</a>
-				<pre><code class="language-js"><span class="hljs-keyword">const</span> { TWS } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'tws-auth'</span>)
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> { TWS } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;tws-auth&#x27;</span>)
 
 <span class="hljs-keyword">const</span> tws = <span class="hljs-keyword">new</span> TWS({
-  <span class="hljs-attr">appId</span>: <span class="hljs-string">'78f95e92c06a546f7dab7327'</span>,
-  <span class="hljs-attr">appSecrets</span>: [<span class="hljs-string">'app_secret_new'</span>, <span class="hljs-string">'app_secret_old'</span>],
-  <span class="hljs-attr">host</span>: <span class="hljs-string">'https://auth.teambitionapis.com'</span>
+  <span class="hljs-attr">appId</span>: <span class="hljs-string">&#x27;78f95e92c06a546f7dab7327&#x27;</span>,
+  <span class="hljs-attr">appSecrets</span>: [<span class="hljs-string">&#x27;app_secret_new&#x27;</span>, <span class="hljs-string">&#x27;app_secret_old&#x27;</span>],
+  <span class="hljs-attr">host</span>: <span class="hljs-string">&#x27;https://auth.teambitionapis.com&#x27;</span>
 })
 
 ;(<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> tws.request(<span class="hljs-string">'GET'</span>, <span class="hljs-string">'/version'</span>))
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> tws.get(<span class="hljs-string">'/version'</span>))
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> tws.authSrv.getUserById(<span class="hljs-string">'59291f0178af6230601abecc'</span>))
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> tws.request(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;/version&#x27;</span>))
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> tws.get(<span class="hljs-string">&#x27;/version&#x27;</span>))
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> tws.authSrv.getUserById(<span class="hljs-string">&#x27;59291f0178af6230601abecc&#x27;</span>))
   <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> tws
-    .withTenant(<span class="hljs-string">'56f0d51e3cd13a5b537c3a12'</span>, <span class="hljs-string">'organization'</span>)
-    .get(<span class="hljs-string">'/v1/projects/5ae144a3b292d60011b8c329'</span>)
+    .withTenant(<span class="hljs-string">&#x27;56f0d51e3cd13a5b537c3a12&#x27;</span>, <span class="hljs-string">&#x27;organization&#x27;</span>)
+    .get(<span class="hljs-string">&#x27;/v1/projects/5ae144a3b292d60011b8c329&#x27;</span>)
   )
 })()</code></pre>
 				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
 					<h2>Documentation</h2>
 				</a>
-				<pre><code class="language-js"><span class="hljs-keyword">const</span> { Client } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'tws-auth'</span>)</code></pre>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> { Client } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;tws-auth&#x27;</span>)</code></pre>
 				<a href="#new-client-appid-appsecret-host-timeout-cachestore-rootcert-privatekey-certchain-" id="new-client-appid-appsecret-host-timeout-cachestore-rootcert-privatekey-certchain-" style="color: inherit; text-decoration: none;">
 					<h3>new Client({ appId, appSecret[, host, timeout, cacheStore, rootCert, privateKey, certChain] })</h3>
 				</a>
@@ -130,135 +130,135 @@
      */</span>
     <span class="hljs-keyword">static</span> request(options: RequestOptions &amp; request.UrlOptions): <span class="hljs-built_in">Promise</span>&lt;Response&gt;;
     <span class="hljs-keyword">constructor</span>(<span class="hljs-params">options: ClientOptions</span>);
-    /**
+    <span class="hljs-comment">/**
      * @returns User-Agent on the client.
-     */
-    /**
+     */</span>
+    <span class="hljs-comment">/**
     * Set User-Agent to the client.
     * @param ua User-Agent string.
-    */
-    UA: string;
-    /**
+    */</span>
+    UA: <span class="hljs-built_in">string</span>;
+    <span class="hljs-comment">/**
      * @returns host on the client.
-     */
-    readonly host: string;
-    /**
+     */</span>
+    <span class="hljs-keyword">readonly</span> host: <span class="hljs-built_in">string</span>;
+    <span class="hljs-comment">/**
      * @returns preset headers on the client.
-     */
-    readonly headers: Payload;
-    /**
+     */</span>
+    <span class="hljs-keyword">readonly</span> headers: Payload;
+    <span class="hljs-comment">/**
      * @returns preset query on the client.
-     */
-    readonly query: Payload;
-    /**
+     */</span>
+    <span class="hljs-keyword">readonly</span> query: Payload;
+    <span class="hljs-comment">/**
      * @returns preset request options on the client.
-     */
-    readonly requestOptions: RequestOptions;
-    /**
-     * Creates (<span class="hljs-params">by <span class="hljs-built_in">Object</span>.create</span>) a **new client** instance with given service methods.
+     */</span>
+    <span class="hljs-keyword">readonly</span> requestOptions: RequestOptions;
+    <span class="hljs-comment">/**
+     * Creates (by Object.create) a **new client** instance with given service methods.
      * @param servicePrototype service methods that will be mount to client.
      * @param servicehost service host for new client.
      * @returns a **new client** with with given service methods.
-     */
-    withService&lt;T&gt;(<span class="hljs-params">serviceMethod: T, servicehost?: <span class="hljs-built_in">string</span></span>): this &amp; T;
-    /**
-     * Creates (<span class="hljs-params">by <span class="hljs-built_in">Object</span>.create</span>) a **new client** instance with given request options.
+     */</span>
+    withService&lt;T&gt;(serviceMethod: T, servicehost?: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">this</span> &amp; T;
+    <span class="hljs-comment">/**
+     * Creates (by Object.create) a **new client** instance with given request options.
      * @param options request options that will be copy into client.
      * @returns a **new client** with with given request options.
-     */
-    withOptions(<span class="hljs-params">options: RequestOptions</span>): this;
-    /**
-     * Creates (<span class="hljs-params">by <span class="hljs-built_in">Object</span>.create</span>) a **new client** instance with given headers.
+     */</span>
+    withOptions(options: RequestOptions): <span class="hljs-built_in">this</span>;
+    <span class="hljs-comment">/**
+     * Creates (by Object.create) a **new client** instance with given headers.
      * @param headers headers that will be copy into client.
      * @returns a **new client** with with given headers.
-     */
-    withHeaders(<span class="hljs-params">headers: Payload</span>): this;
-    /**
-     * Creates (<span class="hljs-params">by <span class="hljs-built_in">Object</span>.create</span>) a **new client** instance with given query.
+     */</span>
+    withHeaders(headers: Payload): <span class="hljs-built_in">this</span>;
+    <span class="hljs-comment">/**
+     * Creates (by Object.create) a **new client** instance with given query.
      * @param query query that will be copy into client.
      * @returns a **new client** with with given query.
-     */
-    withQuery(<span class="hljs-params">query: Payload</span>): this;
-    /**
-     * Creates (<span class="hljs-params">by withHeaders</span>) a **new client** instance with given `X-Tenant-Id` and `X-Tenant-Type`.
+     */</span>
+    withQuery(query: Payload): <span class="hljs-built_in">this</span>;
+    <span class="hljs-comment">/**
+     * Creates (by withHeaders) a **new client** instance with given `X-Tenant-Id` and `X-Tenant-Type`.
      * @param tenantId that will be added to header as `X-Tenant-Id`.
      * @param tenantType that will be added to header as `X-Tenant-Type`.
      * @returns a **new client** with with given headers.
-     */
-    withTenant(<span class="hljs-params">tenantId: <span class="hljs-built_in">string</span>, tenantType?: <span class="hljs-built_in">string</span></span>): this;
-    /**
-     * Creates (<span class="hljs-params">by withHeaders</span>) a **new client** instance with given `X-Operator-ID`.
+     */</span>
+    withTenant(tenantId: <span class="hljs-built_in">string</span>, tenantType?: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">this</span>;
+    <span class="hljs-comment">/**
+     * Creates (by withHeaders) a **new client** instance with given `X-Operator-ID`.
      * @param operatorId that will be added to header as `X-Operator-ID`.
      * @returns a **new client** with with given headers.
-     */
-    withOperator(<span class="hljs-params">operatorId: <span class="hljs-built_in">string</span></span>): this;
-    /**
-     * Creates a JWT token string with given payload and client's appSecrets.
+     */</span>
+    withOperator(operatorId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">this</span>;
+    <span class="hljs-comment">/**
+     * Creates a JWT token string with given payload and client&#x27;s appSecrets.
      * @param payload Payload to sign, should be an literal object.
      * @param options some JWT sign options.
      * @returns a token string.
-     */
-    signToken(<span class="hljs-params">payload: Payload, options?: jwt.SignOptions</span>): string;
-    /**
+     */</span>
+    signToken(payload: Payload, options?: jwt.SignOptions): <span class="hljs-built_in">string</span>;
+    <span class="hljs-comment">/**
      * Creates a periodical changed JWT token string with appId and appSecrets.
      * @param payload Payload to sign, should be an literal object.
      * @param periodical period in seccond, default to 3600s.
      * @param options some JWT sign options.
      * @returns a token string.
-     */
-    signAppToken(<span class="hljs-params">periodical?: <span class="hljs-built_in">number</span>, options?: jwt.SignOptions</span>): string;
-    /**
+     */</span>
+    signAppToken(periodical?: <span class="hljs-built_in">number</span>, options?: jwt.SignOptions): <span class="hljs-built_in">string</span>;
+    <span class="hljs-comment">/**
      * Decode a JWT token string to literal object payload.
      * @param token token to decode.
      * @param options some JWT decode options.
      * @returns a literal object.
-     */
-    decodeToken(<span class="hljs-params">token: <span class="hljs-built_in">string</span>, options?: jwt.DecodeOptions</span>): Payload;
-    /**
+     */</span>
+    decodeToken(token: <span class="hljs-built_in">string</span>, options?: jwt.DecodeOptions): Payload;
+    <span class="hljs-comment">/**
      * Decode and verify a JWT token string to literal object payload.
-     * if verify failure, it will throw a 401 error (<span class="hljs-params">creates by 'http-errors' <span class="hljs-built_in">module</span></span>)
+     * if verify failure, it will throw a 401 error (creates by &#x27;http-errors&#x27; module)
      * @param token token to decode.
      * @param options some JWT verify options.
      * @returns a literal object.
-     */
-    verifyToken(<span class="hljs-params">token: <span class="hljs-built_in">string</span>, options?: jwt.VerifyOptions</span>): Payload;
-    /**
+     */</span>
+    verifyToken(token: <span class="hljs-built_in">string</span>, options?: jwt.VerifyOptions): Payload;
+    <span class="hljs-comment">/**
      * request with given method, url and data.
-     * It will genenrate a jwt token by signToken, and set to 'Authorization' header.
+     * It will genenrate a jwt token by signToken, and set to &#x27;Authorization&#x27; header.
      * It will merge headers, query and request options that preset into client.
      * @param method method to request.
      * @param url url to request, it will be resolved with client host.
      * @param data data to request.
      * @returns a promise with Response
-     */
-    request(<span class="hljs-params">method: <span class="hljs-built_in">string</span>, url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;Response&gt;;
-    /**
+     */</span>
+    request(method: <span class="hljs-built_in">string</span>, url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span>): <span class="hljs-built_in">Promise</span>&lt;Response&gt;;
+    <span class="hljs-comment">/**
      * request with `GET` method.
      * @returns a promise with Response body
-     */
-    get&lt;T&gt;(<span class="hljs-params">url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;T&gt;;
-    /**
+     */</span>
+    get&lt;T&gt;(url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span>): <span class="hljs-built_in">Promise</span>&lt;T&gt;;
+    <span class="hljs-comment">/**
      * request with `POST` method.
      * @returns a promise with Response body
-     */
-    post&lt;T&gt;(<span class="hljs-params">url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;T&gt;;
-    /**
+     */</span>
+    post&lt;T&gt;(url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span>): <span class="hljs-built_in">Promise</span>&lt;T&gt;;
+    <span class="hljs-comment">/**
      * request with `PUT` method.
      * @returns a promise with Response body
-     */
-    put&lt;T&gt;(<span class="hljs-params">url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;T&gt;;
-    /**
+     */</span>
+    put&lt;T&gt;(url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span>): <span class="hljs-built_in">Promise</span>&lt;T&gt;;
+    <span class="hljs-comment">/**
      * request with `PATCH` method.
      * @returns a promise with Response body
-     */
-    patch&lt;T&gt;(<span class="hljs-params">url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;T&gt;;
-    /**
+     */</span>
+    patch&lt;T&gt;(url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span>): <span class="hljs-built_in">Promise</span>&lt;T&gt;;
+    <span class="hljs-comment">/**
      * request with `DELETE` method.
      * @returns a promise with Response body
-     */
-    delete&lt;T&gt;(<span class="hljs-params">url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span></span>): Promise&lt;T&gt;;
+     */</span>
+    <span class="hljs-keyword">delete</span>&lt;T&gt;(url: <span class="hljs-built_in">string</span>, data?: <span class="hljs-built_in">any</span>): <span class="hljs-built_in">Promise</span>&lt;T&gt;;
 }</code></pre>
-				<a href="#more-a-hrefhttpsteambitiongithubiotws-authhttpsteambitiongithubiotws-autha" id="more-a-hrefhttpsteambitiongithubiotws-authhttpsteambitiongithubiotws-autha" style="color: inherit; text-decoration: none;">
+				<a href="#more-httpsteambitiongithubiotws-auth" id="more-httpsteambitiongithubiotws-auth" style="color: inherit; text-decoration: none;">
 					<h3>More: <a href="https://teambition.github.io/tws-auth/">https://teambition.github.io/tws-auth/</a></h3>
 				</a>
 				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
@@ -274,14 +274,14 @@
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_client_.html">"client"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_client_.html">&quot;client&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_index_.html">"index"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_index_.html">&quot;index&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_ua_.html">"ua"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_ua_.html">&quot;ua&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -297,57 +297,17 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>
@@ -357,6 +317,5 @@
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>
