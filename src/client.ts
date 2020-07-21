@@ -44,6 +44,7 @@ export interface ClientOptions {
   certChain?: Buffer
   privateKey?: Buffer
   rootCert?: string | Buffer | string[] | Buffer[]
+  useQuerystring?: boolean
 }
 
 export interface Payload { [key: string]: any }
@@ -150,6 +151,7 @@ export class Client {
       retryDelay: options.retryDelay,
       maxAttempts: options.maxAttempts,
       retryErrorCodes: options.retryErrorCodes,
+      useQuerystring: options.useQuerystring,
     } as RequestOptions
   }
 
