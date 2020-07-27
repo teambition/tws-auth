@@ -1,5 +1,6 @@
 'use strict'
 
+import { IncomingMessage } from 'http'
 import request from 'request'
 import jwt from 'jsonwebtoken'
 import createError from 'http-errors'
@@ -10,6 +11,7 @@ const MONGO_REG = /^[0-9a-f]{24}$/i
 // Network Errors, exclude 'ETIMEDOUT' and 'ESOCKETTIMEDOUT'
 // https://github.com/teambition/tws-auth/issues/15
 const RETRIABLE_ERRORS = ['ECONNRESET', 'ENOTFOUND', 'ECONNREFUSED', 'EHOSTUNREACH', 'EPIPE', 'EAI_AGAIN']
+const FORWARD_HEADERS = ['x-request-id', 'x-canary']
 
 /**
  * Options for request retrying.
@@ -233,6 +235,29 @@ export class Client {
     return Object.assign(Object.create(this), {
       _headers: Object.assign({}, this._headers, headers),
     })
+  }
+
+  /**
+   * Creates (by Object.create) a **new client** instance with headers copy from the request.
+   * @param req IncomingMessage object that headers read from.
+   * @param headers headers that will be copy into client.
+   * @returns a **new client** with with given headers.
+   */
+  forwardHeaders (req: IncomingMessage | any, ...headers: string[]): this {
+    if (req.req != null && req.req.headers != null) {
+      req = req.req
+    }
+
+    if (headers.length === 0) {
+      headers = FORWARD_HEADERS
+    }
+    const forwardHeaders: { [key: string]: string | string[] } = {}
+    for (const header of headers) {
+      if (req.headers[header] != null) {
+        forwardHeaders[header] = req.headers[header]
+      }
+    }
+    return this.withHeaders(forwardHeaders)
   }
 
   /**

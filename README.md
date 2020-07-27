@@ -203,7 +203,7 @@ class Client {
 ## License
 
 `tws-auth` is licensed under the [MIT](https://github.com/teambition/tws-auth/blob/master/LICENSE) license.
-Copyright &copy; 2017-2019 Teambition.
+Copyright &copy; 2017-2020 Teambition.
 
 [npm-url]: https://www.npmjs.com/package/tws-auth
 [npm-image]: https://img.shields.io/npm/v/tws-auth.svg
