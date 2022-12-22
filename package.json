@@ -25,7 +25,7 @@
   "dependencies": {
     "app-root-path": "^3.0.0",
     "http-errors": "^1.8.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "request": "^2.88.2",
     "tslib": "^2.0.0",
     "user-agent-composer": "^0.1.2"
